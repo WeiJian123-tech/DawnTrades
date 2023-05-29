@@ -7,11 +7,21 @@ package Prototype_003;
  * 
  * Open source free trading program
  * 
+ * Java Library: XChart
+ * 
  * @Authors: Wei Jian Zhen, Jawad Rahman
  */
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+import java.io.*;
+import java.awt.*;
+import javax.swing.*;
+import java.text.*;
+
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.*;
+import org.knowm.xchart.internal.*;
 
 public class Main {
 
@@ -22,26 +32,6 @@ public class Main {
 				);
 		
 		BackEnd tradeAlgo = new BackEnd(stockPrices);
-		
-		FrontEnd tradeWindow = new FrontEnd(tradeAlgo);
-		
-		tradeWindow.defineGUI();
-		
-		/**
-		for(int i = 1; i < stockPrices.size(); i++) {
-			System.out.println(
-					tradeAlgo.getMovingAverage(stockPrices, i)
-					);
-		}
-		**/
-		
-		/**
-		for(int i = 1; i < stockPrices.size(); i++) {
-			System.out.println(
-					tradeAlgo.getStandardDeviation(stockPrices, i)
-					);
-		}
-		**/
 	}
 
 }
