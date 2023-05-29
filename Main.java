@@ -18,6 +18,8 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.text.*;
+import java.time.*;
+import java.time.temporal.ChronoField;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.*;
@@ -27,11 +29,45 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		ArrayList<Double> stockPrices = new ArrayList<>(
-				List.of(162.39, 162.68, 163.28, 164.56, 164.60, 164.46, 165.0, 164.67, 164.66)
+		
+		ArrayList<Number> yPrices = new ArrayList<>(
+				List.of(8.74, 8.78, 8.94, 8.92, 9.00, 9.00, 9.05, 9.11)
+				);
+		
+		ArrayList<Number> xTime = new ArrayList<>(
+				List.of(9.5, 10, 11, 12, 13, 14, 15, 16)
+				);
+		
+		
+		//System.out.println(Duration.ofDays(1).toHours() / 0.5);
+		
+		//LocalTime stockTime = LocalTime.now();
+		
+		//System.out.println(stockTime);
+		
+		/**
+		ArrayList<Double> yPrices = new ArrayList<>(
+				List.of(8.74, 8.78, 8.94, 8.92, 9.00, 9.00, 9.05, 9.11)
+				);
+		
+		ArrayList<String> xTime = new ArrayList<>(
+				List.of("12:00", "1", "2", "3", "4", "5", "6", "7")
+				);
+		**/
+		
+		ArrayList<Double> stockPrices = new ArrayList<Double>(
+				List.of(8.74, 8.78, 8.94, 8.92, 9.00, 9.00, 9.05, 9.11)
 				);
 		
 		BackEnd tradeAlgo = new BackEnd(stockPrices);
+		
+		//Create the chart
+		XYChart chart = QuickChart.getChart(
+				"Project GoldenTrades", "Time", "Prices", "Stock Price", xTime, yPrices
+				);
+		
+		//Show the chart
+		new SwingWrapper<XYChart>(chart).displayChart();
 	}
-
+	
 }

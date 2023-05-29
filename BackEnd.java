@@ -42,11 +42,11 @@ public class BackEnd {
 	
 	//Calculate a simple moving average of a stock. 
 	//Link: https://is.gd/O5XYS9
-	private double movingAverage(List<Double> closingPrices, int periods) {
+	private double movingAverage(List<Double> priceData2, int periods) {
 		
 		double movingAverage = 0.0;
 		
-		for(Double prices: closingPrices) {
+		for(Double prices: priceData2) {
 			movingAverage += prices;
 		}
 		
@@ -93,12 +93,12 @@ public class BackEnd {
 	}
 	
 	//Calculate lower bollinger band
-	private double lowerBollingerBand(List<Double> closingPrices, int periods) {
+	private double lowerBollingerBand(List<Double> priceData2, int periods) {
 		
 		//The middle bollinger band is the moving average
-		double movAvg = movingAverage(closingPrices, periods);
+		double movAvg = movingAverage(priceData2, periods);
 		
-		double stdDev = standardDeviation(closingPrices, periods);
+		double stdDev = standardDeviation(priceData2, periods);
 		
 		return movAvg - (stdDev * 2);
 	}
