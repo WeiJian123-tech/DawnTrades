@@ -34,6 +34,41 @@ public class BackEnd {
 		this(new ArrayList<Double>(), 0, new double[999], new double[999], new double[7]);
 	}
 	
+	/*
+	CANDLESTICK PATTERN DETECTION ALGORITHMS
+
+	Things to do:
+	  - Get better calculations/detection results
+	  - Make functions work with data in Backend Class instance fields
+	  - Improve return types
+	  - Possible change date format
+  
+  	*/
+  	public String detectMarubozu(String date, float open, float high, float low, float close){
+    		if(low == open || high == close) {
+        		return date + "Bull Marubozu Detected";
+      		} else if(high == open || low == close){
+        		return date + " Bear Marubozu Detected";
+      		}
+    		return null;
+  	}
+
+  	public String detectDoji(String date, float open, float high, float low, float close){
+    		if((Math.abs(close - open) / (high - low) < 0.1) && ((high - Math.max(close, open)) > (3 * Math.abs(close - open))) && ((Math.min(close, open) - low) > (3 * Math.abs(close - open)))){
+      			return date + " Doji Detected";
+    		}
+    		return null;
+  	}
+
+  	public String detectEngulf(String date, float open, float high, float low, float close, float prevOpen, float prevHigh, float prevLow, float prevClose){
+    		if(open >= prevClose && prevClose > prevOpen && open > close && prevOpen >= close && (open - close) > (prevClose - prevOpen)){
+      			return date + " Bearish Engulfment Detected";
+    		} else if(close >= prevOpen && prevOpen > prevClose && close > open && prevClose >= open && (close - open) > (prevOpen - prevClose)){
+      			return date + " Bullish Engulfment Detected";
+    		}
+    		return null;
+  	}
+	
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
 	//Lastly combining them to predict stocks accurately.
