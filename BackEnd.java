@@ -168,6 +168,35 @@ public class BackEnd {
 	     */
 	}
 	
+	  //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
+	  private static double[] calculateEMA(double[] closingPrices, int period) {
+	      double[] ema = new double[closingPrices.length];
+
+	      double multiplier = 2.0 / (period + 1);
+	      ema[0] = closingPrices[0];
+
+	      for (int i = 1; i < closingPrices.length; i++) {
+		  ema[i] = (closingPrices[i] - ema[i - 1]) * multiplier + ema[i - 1];
+	      }
+
+	      return ema;
+	  }
+
+	  public static double calculateMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
+	      double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
+	      double[] longEMA = calculateEMA(closingPrices, longPeriod);
+
+	      int minPeriod = Math.min(shortEMA.length, longEMA.length);
+	      double[] macdLine = new double[minPeriod];
+	      for (int i = 0; i < minPeriod; i++) {
+		  macdLine[i] = shortEMA[i] - longEMA[i];
+	      }
+
+	      double[] signalLine = calculateEMA(macdLine, signalPeriod);
+
+	      int lastSignalIndex = signalLine.length - 1;
+	      return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
+	  }	
 	
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
