@@ -37,5 +37,5 @@ Programmed and developed by Wei Jian Zhen and Jawad Rahman
 
 Apache 2.0 Open Source License
 
-
-
+**DISCLAIMER:**
+This program is not guarenteed to generate profits nor is qualified to offer financial advice for the end user. Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business related questions. Please use discretion when utilizing, modifying, trading with this program. The authors of this program are not entitled or liable for the end user's personal trading decisions nor profits. This open scource project will remain free and always be free. If you have bought this program with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal council.
