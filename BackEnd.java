@@ -69,6 +69,106 @@ public class BackEnd {
     		return null;
   	}
 	
+	public String detectMorningStar(String date, float open, float high, float low, float close, float prevOpen,
+	      float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
+	      float prevClose2) {
+	      if (Math.max(prevOpen, prevClose) < prevClose2 && prevClose2 < prevOpen2 && close > open &&
+		  open > Math.max(prevOpen, prevClose)) {
+		  return date + " Morning Star Detected";
+	      }
+	      return null;
+	}
+
+	public String detectEveningStar(String date, float open, float high, float low, float close, float prevOpen,
+	      float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
+	      float prevClose2) {
+	      if (Math.min(prevOpen, prevClose) > prevClose2 && prevClose2 > prevOpen2 && close < open &&
+		  open < Math.min(prevOpen, prevClose)) {
+		  return date + " Evening Star Detected";
+	      }
+	      return null;
+	}
+	
+	// RSI CALCULATION ALGORITHM
+	public double[] calculateRSI(double[] closingPrices, int periodLength) {
+	    double[] rsiValues = new double[closingPrices.length];
+
+	    for (int i = periodLength; i < closingPrices.length; i++) {
+		double gainSum = 0.0;
+		double lossSum = 0.0;
+
+		for (int j = i - periodLength; j < i; j++) {
+		    double priceDiff = closingPrices[j + 1] - closingPrices[j];
+		    if (priceDiff > 0) {
+			gainSum += priceDiff;
+		    } else {
+			lossSum -= priceDiff;
+		    }
+		}
+
+		double averageGain = gainSum / periodLength;
+		double averageLoss = lossSum / periodLength;
+
+		double relativeStrength = averageGain / averageLoss;
+		double rsi = 100 - (100 / (1 + relativeStrength));
+
+		rsiValues[i] = rsi;
+	    }
+
+	    return rsiValues;
+	    /*
+	     * double prevClose = 0;
+	     * double currClose = 0;
+	     * double[] posChanges = new double[closingPrices.length];
+	     * double[] negChanges = new double[closingPrices.length];
+	     * double[] avgGains = new double[closingPrices.length];
+	     * double[] avgLoss = new double[closingPrices.length];
+	     * posChanges[0] = 0;
+	     * negChanges[0] = 0;
+	     * double diff = 0;
+	     * double[] rsiPoints = new double[closingPrices.length];
+	     * 
+	     * for(int i = 1; i < closingPrices.length; i++){
+	     * currClose = closingPrices[i];
+	     * prevClose = closingPrices[i-1];
+	     * diff = currClose - prevClose;
+	     * 
+	     * if(diff > 0){
+	     * posChanges[i] = diff;
+	     * negChanges[i] = 0;
+	     * } else if(diff < 0){
+	     * posChanges[i] = 0;
+	     * negChanges[i] = Math.abs(diff);
+	     * } else{
+	     * posChanges[i] = 0;
+	     * negChanges[i] = 0;
+	     * }
+	     * 
+	     * if(i == Math.max(i, numPeriods)){
+	     * double gainSum = 0;
+	     * double lossSum = 0;
+	     * 
+	     * for(int j = Math.max(1, numPeriods); j > 0; j--){
+	     * gainSum += posChanges[j];
+	     * lossSum += negChanges[j];
+	     * }
+	     * } else if(i > Math.max(1, numPeriods)){
+	     * avgGains[i] = (avgGains[i-1] * (numPeriods - 1) + posChanges[i]) /
+	     * Math.max(1, numPeriods);
+	     * avgLoss[i] = (avgLoss[i-1] * (numPeriods - 1) + negChanges[i]) / Math.max(1,
+	     * numPeriods);
+	     * rsiPoints[i] = avgLoss[i] == 0 ? 100 : avgGains[i] == 0 ? 0 : Math.round(100
+	     * - (100 / (1 + avgGains[i] / avgLoss[i])));
+	     * }
+	     * }
+	     * for(int i = 0; i < rsiPoints.length; i++){
+	     * System.out.println(rsiPoints[i]);
+	     * }
+	     * return rsiPoints;
+	     */
+	}
+	
+	
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
 	//Lastly combining them to predict stocks accurately.
