@@ -5,20 +5,17 @@ package Prototype_003;
  */
 
 import java.util.*;
+import java.math.*;
 
 public class BackEnd {
 
 	private List<Double> priceData;
 	private int periods;
-	private double[] movingAverages;
-	private double[] standardDeviations;
 	private double[] fibonacciRetracementLevels = new double[7];
 	
 	public BackEnd(List<Double> priceData, int periods, double[] movingAverages, double[] standardDeviations, double[] fibonacciRetracementLevels) {
 		this.priceData = priceData;
 		this.periods = periods;
-		this.movingAverages = movingAverages;
-		this.standardDeviations = standardDeviations;
 		this.fibonacciRetracementLevels = fibonacciRetracementLevels;
 	}
 	
@@ -202,13 +199,11 @@ public class BackEnd {
 	//Then Fundamental Analysis.
 	//Lastly combining them to predict stocks accurately.
 	
-	//Set Doubles to BigDecimal to adjust rounding errors. Set to 4 decimal places.
-	
 	//Calculate a simple moving average of a stock. 
 	//Link: https://is.gd/O5XYS9
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
-	private List<? extends Number> movingAverage(List<Double> priceData, int periods) {
+	private List<Double> movingAverage(List<Double> priceData, int periods) {
 		
 		List<Double> movAvgs = new ArrayList<>();
 		
@@ -249,7 +244,7 @@ public class BackEnd {
 	//Calculate a standard deviation of a stock.
 	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
 	
-	private List<? extends Number> standardDeviation(List<Double> priceData, int periods) {
+	private List<Double> standardDeviation(List<Double> priceData, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
 		
@@ -260,23 +255,63 @@ public class BackEnd {
 				continue;
 			}
 			
-			double sum = 0.0, standardDeviation = 0.0, mean = 0.0;
+			double sum = 0.0, mean = 0.0, standardDeviation = 0.0;
 			
 			for(int j = 0; j < periods; j++) {
-				sum += priceData.get(i - j);
+				mean += priceData.get(i - j) / periods;
+				standardDeviation += Math.pow( (priceData.get(i - j) - mean) , 2);
 			}
 			
-			mean = sum / periods;
-			
+			/*
 			for(int k = 0; k < periods; k++) {
-				standardDeviation += Math.pow(priceData.get(i - k) - mean, 2);
+				standardDeviation += Math.pow( (priceData.get(i - k) - mean) , 2);
 			}
+			*/
 			
 			stdDevs.add(standardDeviation);
 			
 		}
 		
 		return stdDevs;
+	}
+	
+	private List<Double> upperBollingerBand(List<Double> priceData, int periods) {
+		//The middle bollinger band is the moving average
+		List<Double> movAvg = movingAverage(priceData, periods);
+		
+		List<Double> stdDev = standardDeviation(priceData, periods);
+		
+		List<Double> upBollBand = new ArrayList<>();
+		
+		for(int i = 0; i < priceData.size(); i++) {
+			if(i < periods) {
+				upBollBand.add(null);
+				continue;
+			}
+			
+			upBollBand.add(movAvg.get(i) + (stdDev.get(i) * 2));
+		}
+		
+		return upBollBand;
+	}
+	
+	private List<Double> lowerBollingerBand(List<Double> priceData, int periods) {
+		List<Double> movAvg = movingAverage(priceData, periods);
+		
+		List<Double> stdDev = standardDeviation(priceData, periods);
+		
+		List<Double> lowBollBand = new ArrayList<>();
+		
+		for(int i = 0; i < priceData.size(); i++) {
+			if(i < periods) {
+				lowBollBand.add(null);
+				continue;
+			}
+			
+			lowBollBand.add(movAvg.get(i) - (stdDev.get(i) * 2));
+		}
+		
+		return lowBollBand;
 	}
 	
 	/*
@@ -351,7 +386,7 @@ public class BackEnd {
 	 * Public methods for user access;
 	*/
 	
-	public List<? extends Number> getMovingAverage(List<Double> priceData, int periods) {
+	public List<Double> getMovingAverage(List<Double> priceData, int periods) {
 		return movingAverage(priceData, periods);
 	}
 	
@@ -361,19 +396,17 @@ public class BackEnd {
 	}
 	*/
 	
-	public List<? extends Number> getStandardDeviation(List<Double> priceData, int periods) {
+	public List<Double> getStandardDeviation(List<Double> priceData, int periods) {
 		return standardDeviation(priceData, periods);
 	}
 	
-	/*
-	public List<? extends Number> getUpperBand(List<Double> priceData, int periods) {
+	public List<Double> getUpperBand(List<Double> priceData, int periods) {
 		return upperBollingerBand(priceData, periods);
 	}
 	
-	public List<? extends Number> getLowerBand(List<Double> priceData, int periods) {
+	public List<Double> getLowerBand(List<Double> priceData, int periods) {
 		return lowerBollingerBand(priceData, periods);
 	}
-	*/
 	
 	/*
 	public double getStandardDeviation(List<Double> priceData, int periods) {
