@@ -168,36 +168,36 @@ public class BackEnd {
 	     */
 	}
 	
-	  //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
-	  private static double[] calculateEMA(double[] closingPrices, int period) {
-	      double[] ema = new double[closingPrices.length];
+  //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
+	private static double[] calculateEMA(double[] closingPrices, int period) {
+		double[] ema = new double[closingPrices.length];
 
-	      double multiplier = 2.0 / (period + 1);
-	      ema[0] = closingPrices[0];
+		double multiplier = 2.0 / (period + 1);
+		ema[0] = closingPrices[0];
 
-	      for (int i = 1; i < closingPrices.length; i++) {
-		  ema[i] = (closingPrices[i] - ema[i - 1]) * multiplier + ema[i - 1];
-	      }
+		for (int i = 1; i < closingPrices.length; i++) {
+			ema[i] = (closingPrices[i] - ema[i - 1]) * multiplier + ema[i - 1];
+		}
 
-	      return ema;
-	  }
-
-	  public static double calculateMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
-	      double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
-	      double[] longEMA = calculateEMA(closingPrices, longPeriod);
-
-	      int minPeriod = Math.min(shortEMA.length, longEMA.length);
-	      double[] macdLine = new double[minPeriod];
-	      for (int i = 0; i < minPeriod; i++) {
-		  macdLine[i] = shortEMA[i] - longEMA[i];
-	      }
-
-	      double[] signalLine = calculateEMA(macdLine, signalPeriod);
-
-	      int lastSignalIndex = signalLine.length - 1;
-	      return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
-	  }	
+		return ema;
+  	}
 	
+	public static double calculateMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
+		double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
+		double[] longEMA = calculateEMA(closingPrices, longPeriod);
+
+		int minPeriod = Math.min(shortEMA.length, longEMA.length);
+		double[] macdLine = new double[minPeriod];
+		for (int i = 0; i < minPeriod; i++) {
+			macdLine[i] = shortEMA[i] - longEMA[i];
+		}
+
+		double[] signalLine = calculateEMA(macdLine, signalPeriod);
+
+		int lastSignalIndex = signalLine.length - 1;
+		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
+  	}	
+
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
 	//Lastly combining them to predict stocks accurately.
@@ -206,6 +206,32 @@ public class BackEnd {
 	
 	//Calculate a simple moving average of a stock. 
 	//Link: https://is.gd/O5XYS9
+	
+	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
+	private List<? extends Number> movingAverage(List<Double> priceData, int periods) {
+		
+		List<Double> movAvgs = new ArrayList<>();
+		
+		for(int i = 0; i < priceData.size(); i++) {
+			
+			if (i < periods) {
+		        movAvgs.add(null);
+		        continue;
+		      }
+			
+			double sum = 0.0;
+			
+			for(int j = 0; j < periods; j++) {
+				sum += priceData.get(i - j);
+			}
+			
+			movAvgs.add(sum / periods);
+		}
+		
+		return movAvgs;
+	}
+	  
+	/*
 	private double movingAverage(List<Double> priceData2, int periods) {
 		
 		double movingAverage = 0.0;
@@ -218,9 +244,42 @@ public class BackEnd {
 		
 		return movingAverage;
 	}
+	*/
 	
 	//Calculate a standard deviation of a stock.
 	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
+	
+	private List<? extends Number> standardDeviation(List<Double> priceData, int periods) {
+		
+		List<Double> stdDevs = new ArrayList<>();
+		
+		for(int i = 0; i < priceData.size(); i++) {
+			
+			if(i < periods) {
+				stdDevs.add(null);
+				continue;
+			}
+			
+			double sum = 0.0, standardDeviation = 0.0, mean = 0.0;
+			
+			for(int j = 0; j < periods; j++) {
+				sum += priceData.get(i - j);
+			}
+			
+			mean = sum / periods;
+			
+			for(int k = 0; k < periods; k++) {
+				standardDeviation += Math.pow(priceData.get(i - k) - mean, 2);
+			}
+			
+			stdDevs.add(standardDeviation);
+			
+		}
+		
+		return stdDevs;
+	}
+	
+	/*
 	private double standardDeviation(List<Double> closingPrices, int periods) {
 		
 		double sum = 0.0, standardDeviation = 0.0;
@@ -237,14 +296,16 @@ public class BackEnd {
 		
 		return standardDeviation;
 	}
+	*/
 	
-	/**
+	/*
 	 * Links for Bollinger Bands:
 	 * Fidelity summary: https://is.gd/mof0KQ
 	 * Investopedia explanation: https://is.gd/cQeFkF
 	 * Stock Charts Formula: https://is.gd/oFRc9L
-	**/
+	*/
 	
+	/*
 	//Calculate upper bollinger band
 	private double upperBollingerBand(List<Double> closingPrices, int periods) {
 		
@@ -266,6 +327,7 @@ public class BackEnd {
 		
 		return movAvg - (stdDev * 2);
 	}
+	*/
 	
 	//Calculate Fibonacci Retracement levels of a stock at 2 points.
 	//Link: https://is.gd/aRjSTM
@@ -285,18 +347,41 @@ public class BackEnd {
 		return fibonacciRetracementLevels[level];
 	}
 	
-	/**
+	/*
 	 * Public methods for user access;
-	**/
+	*/
 	
-	public double getMovingAverage(List<Double> priceData, int periods) {
+	public List<? extends Number> getMovingAverage(List<Double> priceData, int periods) {
 		return movingAverage(priceData, periods);
 	}
 	
-	public double getStandardDeviation(List<Double> priceData, int periods) {
+	/*
+	public double getMovingAverage(List<Double> priceData, int periods) {
+		return movingAverage(priceData, periods);
+	}
+	*/
+	
+	public List<? extends Number> getStandardDeviation(List<Double> priceData, int periods) {
 		return standardDeviation(priceData, periods);
 	}
 	
+	/*
+	public List<? extends Number> getUpperBand(List<Double> priceData, int periods) {
+		return upperBollingerBand(priceData, periods);
+	}
+	
+	public List<? extends Number> getLowerBand(List<Double> priceData, int periods) {
+		return lowerBollingerBand(priceData, periods);
+	}
+	*/
+	
+	/*
+	public double getStandardDeviation(List<Double> priceData, int periods) {
+		return standardDeviation(priceData, periods);
+	}
+	*/
+	
+	/*
 	public double getUpperBand(List<Double> priceData, int periods) {
 		return upperBollingerBand(priceData, periods);
 	}
@@ -304,6 +389,7 @@ public class BackEnd {
 	public double getLowerBand(List<Double> priceData, int periods) {
 		return lowerBollingerBand(priceData, periods);
 	}
+	*/
 	
 	public double getFibonnaciLevel(double highPrice, double lowPrice, int level) {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
@@ -333,7 +419,7 @@ public class BackEnd {
 		return priceData.get(priceData.size()-1);
 	}
 	
-	/***
+	/*
 		From ChatGPT's explanation of its shouldBuy() and shouldSell() methods:
 		
 		The shouldBuy() method first checks if the current price is below the lower band.
@@ -353,10 +439,11 @@ public class BackEnd {
 		it checks if the price has decreased by a certain percentage since the last sell order. 
 		If it has, then it returns true, indicating that a new sell order should be placed. 
 		Otherwise, it returns false.
-	***/
+	*/
 	
 	//Links: https://youtu.be/5FHrvwmKFis & https://is.gd/nblok6
 	
+	/*
 	//Method that indicates when to buy a stock at a particular period.
 	public boolean shouldBuy(int currentIndex) {
 		
@@ -376,4 +463,5 @@ public class BackEnd {
 		
 		return (currentPrice < retraceLevelMiddle) && (currentPrice > upperBand);
 	}
+	*/
 }
