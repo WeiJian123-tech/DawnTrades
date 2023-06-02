@@ -31,8 +31,17 @@ public class Main {
 		
 		List<Double> yPrices = new ArrayList<>(
 				List.of(
+						
+						/*
 						9.23, 10.50, 8.75, 8.96, 7.70, 8.80, 9.02, 11.01, 10.97, 11.05, 8.08, 8.87, 7.46, 8.03,
-						9.00, 8.64, 8.45, 8.55, 8.99, 8.79, 9.02, 9.55, 10.01, 10.5, 10.25
+						9.00, 8.64, 8.45, 8.55, 8.99, 8.79, 9.02, 9.55, 10.01, 10.5, 10.25, 10.32, 10.28, 10.29,
+						10.26, 10.30
+						*/
+						
+						
+						10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
+						
+						
 						)
 				);
 		
@@ -64,9 +73,12 @@ public class Main {
 		
 		chart.addSeries("Candlestick", xTime, openData, highData, lowData, closeData);
 		chart.addSeries("SMA5", xTime, tradeAlgo.getMovingAverage(closeData, 5));
-		chart.addSeries("SMA10", xTime, tradeAlgo.getMovingAverage(closeData, 10));
-		chart.addSeries("SMA15", xTime, tradeAlgo.getMovingAverage(closeData, 15));
+		//chart.addSeries("SMA10", xTime, tradeAlgo.getMovingAverage(closeData, 10));
+		//chart.addSeries("SMA15", xTime, tradeAlgo.getMovingAverage(closeData, 15));
+		
 		chart.addSeries("stdDev", xTime, tradeAlgo.getStandardDeviation(closeData, 5));
+		chart.addSeries("Upper Bollinger Band", xTime, tradeAlgo.getUpperBand(closeData, 5));
+		chart.addSeries("Lower Bollinger Band", xTime, tradeAlgo.getLowerBand(closeData, 5));
 		
 		return chart;
 	}
@@ -134,6 +146,7 @@ public class Main {
 		return nextPrice;
 	}
 	
+	/*
 	private static void lineGraph(List<Double> yPrices, List<Date> xTime) {
 		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		//sdf.setTimeZone(TimeZone.getDefault());
@@ -150,7 +163,7 @@ public class Main {
 		long hour = 3600000;
 		
 		System.out.println(sdf.format(d) + " " + sdf.format(d.getTime() - hour));
-		*/
+		*/ /*
 		
 		//Get current date and time.
 		Calendar cal = Calendar.getInstance();
@@ -190,5 +203,6 @@ public class Main {
 		//Show the line chart
 		new SwingWrapper<XYChart>(chart).displayChart();
 	}
+	*/
 	
 }
