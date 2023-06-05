@@ -154,83 +154,53 @@ public class BackEnd {
 	}
 	
 	// RSI CALCULATION ALGORITHM
-	public double[] calculateRSI(double[] closingPrices, int periodLength) {
-		double[] rsiValues = new double[closingPrices.length];
-		
-		for (int i = periodLength; i < closingPrices.length; i++) {
-		double gainSum = 0.0;
-		double lossSum = 0.0;
-		
-		for (int j = i - periodLength; j < i; j++) {
-		    double priceDiff = closingPrices[j + 1] - closingPrices[j];
-		    if (priceDiff > 0) {
-			gainSum += priceDiff;
-		    } else {
-			lossSum -= priceDiff;
-		    }
-		}
-		
-		double averageGain = gainSum / periodLength;
-		double averageLoss = lossSum / periodLength;
-		
-		double relativeStrength = averageGain / averageLoss;
-		double rsi = 100 - (100 / (1 + relativeStrength));
-		
-		rsiValues[i] = rsi;
-		}
-		
-		return rsiValues;
-	    /*
-	     * double prevClose = 0;
-	     * double currClose = 0;
-	     * double[] posChanges = new double[closingPrices.length];
-	     * double[] negChanges = new double[closingPrices.length];
-	     * double[] avgGains = new double[closingPrices.length];
-	     * double[] avgLoss = new double[closingPrices.length];
-	     * posChanges[0] = 0;
-	     * negChanges[0] = 0;
-	     * double diff = 0;
-	     * double[] rsiPoints = new double[closingPrices.length];
-	     * 
-	     * for(int i = 1; i < closingPrices.length; i++){
-	     * currClose = closingPrices[i];
-	     * prevClose = closingPrices[i-1];
-	     * diff = currClose - prevClose;
-	     * 
-	     * if(diff > 0){
-	     * posChanges[i] = diff;
-	     * negChanges[i] = 0;
-	     * } else if(diff < 0){
-	     * posChanges[i] = 0;
-	     * negChanges[i] = Math.abs(diff);
-	     * } else{
-	     * posChanges[i] = 0;
-	     * negChanges[i] = 0;
-	     * }
-	     * 
-	     * if(i == Math.max(i, numPeriods)){
-	     * double gainSum = 0;
-	     * double lossSum = 0;
-	     * 
-	     * for(int j = Math.max(1, numPeriods); j > 0; j--){
-	     * gainSum += posChanges[j];
-	     * lossSum += negChanges[j];
-	     * }
-	     * } else if(i > Math.max(1, numPeriods)){
-	     * avgGains[i] = (avgGains[i-1] * (numPeriods - 1) + posChanges[i]) /
-	     * Math.max(1, numPeriods);
-	     * avgLoss[i] = (avgLoss[i-1] * (numPeriods - 1) + negChanges[i]) / Math.max(1,
-	     * numPeriods);
-	     * rsiPoints[i] = avgLoss[i] == 0 ? 100 : avgGains[i] == 0 ? 0 : Math.round(100
-	     * - (100 / (1 + avgGains[i] / avgLoss[i])));
-	     * }
-	     * }
-	     * for(int i = 0; i < rsiPoints.length; i++){
-	     * System.out.println(rsiPoints[i]);
-	     * }
-	     * return rsiPoints;
-	     */
-	}
+  	public double[] calculateRSI(double[] closingPrices, int periodLength) {
+      		double[] rsiValues = new double[closingPrices.length];
+
+      		double prevAvgGain = 0;
+      		double prevAvgLoss = 0;
+      		double relativeStrength = 0;
+      		double rsi = 0;
+
+      		for (int i = periodLength; i < closingPrices.length; i++) {
+          		if (i == periodLength) {
+              			double gainSum = 0.0;
+              			double lossSum = 0.0;
+
+              			for (int j = i - periodLength; j < i; j++) {
+                  		double priceDiff = closingPrices[j + 1] - closingPrices[j];
+                  			if (priceDiff > 0) {
+                      				gainSum += priceDiff;
+                  			} else {
+                      				lossSum -= priceDiff;
+                  			}
+              			}
+
+              			double averageGain = gainSum / periodLength;
+              			double averageLoss = lossSum / periodLength;
+              			prevAvgGain = averageGain;
+              			prevAvgLoss = averageLoss;
+
+              			relativeStrength = averageGain / averageLoss;
+              			rsi = 100 - (100 / (1 + relativeStrength));
+
+              			rsiValues[i] = rsi;
+          		} else if (i > periodLength) {
+              			double diff = closingPrices[i] - closingPrices[i - 1];
+              			double currGain = diff > 0 ? diff : 0;
+              			double currLoss = diff < 0 ? Math.abs(diff) : 0;
+              			prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
+              			prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
+              			relativeStrength = prevAvgGain / prevAvgLoss;
+
+              			rsi = 100 - (100 / (1 + relativeStrength));
+
+              			rsiValues[i] = rsi;
+          		}
+      		}
+
+      		return rsiValues;
+  	}
 	
   //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
 	private static double[] calculateEMA(double[] closingPrices, int period) {
