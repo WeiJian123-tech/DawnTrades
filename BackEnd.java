@@ -41,13 +41,48 @@ public class BackEnd {
 	  - Possible change date format
   
   	*/
-  	public String detectMarubozu(String date, float open, float high, float low, float close){
-    		if(low == open || high == close) {
-        		return date + "Bull Marubozu Detected";
-      		} else if(high == open || low == close){
-        		return date + " Bear Marubozu Detected";
-      		}
-    		return null;
+  	//Uses Ideal definition of Marubozu Candles
+  	public String detectMarubozu(String date, float open, float high, float low, float close) {
+	      float bodyLength = Math.abs(close - open);
+	      //float totalLength = high - low;  //Potential future use
+	      float upperShadow = Math.abs(high - Math.max(open, close));
+	      float lowerShadow = Math.abs(Math.min(open, close) - low);
+	      //float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+
+	      if (low == open && high == close) {
+		  return date + "Bull Marubozu Full Detected";
+	      } else if (high == open && low == close) {
+		  return date + " Bear Marubozu Full Detected";
+	      } else if (low == open || high == close) {
+		  if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
+		      return date + " Bull Marubozu Open Detected";
+		  } else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
+		      return date + " Bull Marubozu Close Detected";
+		  }
+	      } else if (high == open || low == close) {
+		  if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
+		      return date + " Bear Marubozu Close Detected";
+		  } else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
+		      return date + " Bear Marubozu Open Detected";
+		  }
+	      }
+	      return null;
+  	}
+
+  	//Detects Candles that are very close to being Marubozu even if they aren't by strict definition
+  	public String detectMarubozuFlexible(String date, float open, float high, float low, float close) {
+	      float bodyLength = Math.abs(close - open);
+	      //float totalLength = high - low;  //Potential future use
+	      float upperShadow = Math.abs(high - Math.max(open, close));
+	      float lowerShadow = Math.abs(Math.min(open, close) - low);
+	      //float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+
+	      if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
+		  return date + " Bull Marubozu Detected";
+	      } else if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
+		  return date + " Bear Marubozu Detected";
+	      }
+      	      return null;
   	}
 
   	public String detectDoji(String date, float open, float high, float low, float close){
