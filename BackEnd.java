@@ -5,30 +5,33 @@ package Prototype_003;
  */
 
 import java.util.*;
-import java.math.*;
 
 public class BackEnd {
 
-	private List<Double> priceData;
+	private double[] priceData;
 	private int periods;
 	private double[] fibonacciRetracementLevels = new double[7];
 	
-	public BackEnd(List<Double> priceData, int periods, double[] movingAverages, double[] standardDeviations, double[] fibonacciRetracementLevels) {
+	public BackEnd(
+			double[] priceData, int periods,
+			double[] movingAverages, double[] standardDeviations,
+			double[] fibonacciRetracementLevels
+			) {
 		this.priceData = priceData;
 		this.periods = periods;
 		this.fibonacciRetracementLevels = fibonacciRetracementLevels;
 	}
 	
-	public BackEnd(List<Double> priceData, int periods) {
+	public BackEnd(double[] priceData, int periods) {
 		this(priceData, periods, new double[999], new double[999], new double[7]);
 	}
 	
-	public BackEnd(List<Double> priceData) {
-		this(priceData, priceData.size(), new double[999], new double[999], new double[7]);
+	public BackEnd(double[] priceData) {
+		this(priceData, priceData.length, new double[999], new double[999], new double[7]);
 	}
 	
 	public BackEnd() {
-		this(new ArrayList<Double>(), 0, new double[999], new double[999], new double[7]);
+		this(new double[999], 999, new double[999], new double[999], new double[7]);
 	}
 	
 	/*
@@ -43,92 +46,121 @@ public class BackEnd {
   	*/
   	//Uses Ideal definition of Marubozu Candles
   	public String detectMarubozu(String date, float open, float high, float low, float close) {
-	      float bodyLength = Math.abs(close - open);
-	      //float totalLength = high - low;  //Potential future use
-	      float upperShadow = Math.abs(high - Math.max(open, close));
-	      float lowerShadow = Math.abs(Math.min(open, close) - low);
-	      //float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  		float bodyLength = Math.abs(close - open);
+  		//float totalLength = high - low;  //Potential future use
+  		float upperShadow = Math.abs(high - Math.max(open, close));
+  		float lowerShadow = Math.abs(Math.min(open, close) - low);
+  		//float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
 
-	      if (low == open && high == close) {
-		  return date + "Bull Marubozu Full Detected";
-	      } else if (high == open && low == close) {
-		  return date + " Bear Marubozu Full Detected";
-	      } else if (low == open || high == close) {
-		  if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-		      return date + " Bull Marubozu Open Detected";
-		  } else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-		      return date + " Bull Marubozu Close Detected";
-		  }
-	      } else if (high == open || low == close) {
-		  if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-		      return date + " Bear Marubozu Close Detected";
-		  } else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-		      return date + " Bear Marubozu Open Detected";
-		  }
-	      }
-	      return null;
+  		if (low == open && high == close) {
+  			return date + "Bull Marubozu Full Detected";
+  		} else if (high == open && low == close) {
+  			return date + " Bear Marubozu Full Detected";
+  		} else if (low == open || high == close) {
+  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
+  				return date + " Bull Marubozu Open Detected";
+  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
+  				return date + " Bull Marubozu Close Detected";
+  			}
+  		} else if (high == open || low == close) {
+  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
+  				return date + " Bear Marubozu Close Detected";
+  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
+  				return date + " Bear Marubozu Open Detected";
+  			}
+  		}
+  		return null;
   	}
 
   	//Detects Candles that are very close to being Marubozu even if they aren't by strict definition
   	public String detectMarubozuFlexible(String date, float open, float high, float low, float close) {
-	      float bodyLength = Math.abs(close - open);
-	      //float totalLength = high - low;  //Potential future use
-	      float upperShadow = Math.abs(high - Math.max(open, close));
-	      float lowerShadow = Math.abs(Math.min(open, close) - low);
-	      //float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  		float bodyLength = Math.abs(close - open);
+  		//float totalLength = high - low;  //Potential future use
+  		float upperShadow = Math.abs(high - Math.max(open, close));
+  		float lowerShadow = Math.abs(Math.min(open, close) - low);
+  		//float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
 
-	      if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
-		  return date + " Bull Marubozu Detected";
-	      } else if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
-		  return date + " Bear Marubozu Detected";
-	      }
-      	      return null;
+  		if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
+  			return date + " Bull Marubozu Detected";
+  		} else if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
+  			return date + " Bear Marubozu Detected";
+  		}
+  		
+  		return null;
   	}
 
   	public String detectDoji(String date, float open, float high, float low, float close){
-    		if((Math.abs(close - open) / (high - low) < 0.1) && ((high - Math.max(close, open)) > (3 * Math.abs(close - open))) && ((Math.min(close, open) - low) > (3 * Math.abs(close - open)))){
-      			return date + " Doji Detected";
-    		}
-    		return null;
+  		if(
+			(Math.abs(close - open) / (high - low) < 0.1) &&
+			((high - Math.max(close, open)) > (3 * Math.abs(close - open))) &&
+			((Math.min(close, open) - low) > (3 * Math.abs(close - open)))
+			) {
+  			return date + " Doji Detected";
+  		}
+  		
+  		return null;
   	}
 
-  	public String detectEngulf(String date, float open, float high, float low, float close, float prevOpen, float prevHigh, float prevLow, float prevClose){
-    		if(open >= prevClose && prevClose > prevOpen && open > close && prevOpen >= close && (open - close) > (prevClose - prevOpen)){
-      			return date + " Bearish Engulfment Detected";
-    		} else if(close >= prevOpen && prevOpen > prevClose && close > open && prevClose >= open && (close - open) > (prevOpen - prevClose)){
-      			return date + " Bullish Engulfment Detected";
-    		}
-    		return null;
+  	public String detectEngulf(
+		String date, float open, float high, float low, float close,
+		float prevOpen, float prevHigh, float prevLow, float prevClose
+		) {
+		if(
+				open >= prevClose &&
+				prevClose > prevOpen &&
+				open > close &&
+				prevOpen >= close &&
+				(open - close) > (prevClose - prevOpen)
+				){
+  			return date + " Bearish Engulfment Detected";
+		} else if(
+				close >= prevOpen &&
+				prevOpen > prevClose &&
+				close > open &&
+				prevClose >= open &&
+				(close - open) > (prevOpen - prevClose)
+				){
+  			return date + " Bullish Engulfment Detected";
+		}
+		return null;
   	}
 	
-	public String detectMorningStar(String date, float open, float high, float low, float close, float prevOpen,
-	      float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
-	      float prevClose2) {
-	      if (Math.max(prevOpen, prevClose) < prevClose2 && prevClose2 < prevOpen2 && close > open &&
-		  open > Math.max(prevOpen, prevClose)) {
-		  return date + " Morning Star Detected";
-	      }
-	      return null;
+	public String detectMorningStar(
+			String date, float open, float high, float low, float close, float prevOpen,
+			float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
+			float prevClose2
+			) {
+		
+		if (Math.max(prevOpen, prevClose) < prevClose2 && prevClose2 < prevOpen2 && close > open &&
+				open > Math.max(prevOpen, prevClose)) {
+			return date + " Morning Star Detected";
+		}
+		
+		return null;
 	}
 
-	public String detectEveningStar(String date, float open, float high, float low, float close, float prevOpen,
-	      float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
-	      float prevClose2) {
-	      if (Math.min(prevOpen, prevClose) > prevClose2 && prevClose2 > prevOpen2 && close < open &&
-		  open < Math.min(prevOpen, prevClose)) {
-		  return date + " Evening Star Detected";
-	      }
-	      return null;
+	public String detectEveningStar(
+			String date, float open, float high, float low, float close, float prevOpen,
+			float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
+			float prevClose2
+	      ) {
+		
+		if (Math.min(prevOpen, prevClose) > prevClose2 && prevClose2 > prevOpen2 && close < open &&
+				open < Math.min(prevOpen, prevClose)) {
+			return date + " Evening Star Detected";
+		}
+		
+		return null;
 	}
 	
 	// RSI CALCULATION ALGORITHM
 	public double[] calculateRSI(double[] closingPrices, int periodLength) {
-	    double[] rsiValues = new double[closingPrices.length];
-
-	    for (int i = periodLength; i < closingPrices.length; i++) {
+		double[] rsiValues = new double[closingPrices.length];
+		
+		for (int i = periodLength; i < closingPrices.length; i++) {
 		double gainSum = 0.0;
 		double lossSum = 0.0;
-
+		
 		for (int j = i - periodLength; j < i; j++) {
 		    double priceDiff = closingPrices[j + 1] - closingPrices[j];
 		    if (priceDiff > 0) {
@@ -137,17 +169,17 @@ public class BackEnd {
 			lossSum -= priceDiff;
 		    }
 		}
-
+		
 		double averageGain = gainSum / periodLength;
 		double averageLoss = lossSum / periodLength;
-
+		
 		double relativeStrength = averageGain / averageLoss;
 		double rsi = 100 - (100 / (1 + relativeStrength));
-
+		
 		rsiValues[i] = rsi;
-	    }
-
-	    return rsiValues;
+		}
+		
+		return rsiValues;
 	    /*
 	     * double prevClose = 0;
 	     * double currClose = 0;
@@ -203,14 +235,14 @@ public class BackEnd {
   //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
 	private static double[] calculateEMA(double[] closingPrices, int period) {
 		double[] ema = new double[closingPrices.length];
-
+		
 		double multiplier = 2.0 / (period + 1);
 		ema[0] = closingPrices[0];
-
+		
 		for (int i = 1; i < closingPrices.length; i++) {
 			ema[i] = (closingPrices[i] - ema[i - 1]) * multiplier + ema[i - 1];
 		}
-
+		
 		return ema;
   	}
 	
@@ -228,7 +260,7 @@ public class BackEnd {
 
 		int lastSignalIndex = signalLine.length - 1;
 		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
-  	}	
+  	}
 
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
@@ -239,11 +271,11 @@ public class BackEnd {
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
 	//Gets closing price data
-	private List<Double> movingAverage(List<Double> closeData, int periods) {
+	private List<Double> movingAverage(double[] closeData, int periods) {
 		
 		List<Double> movAvgs = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.size(); i++) {
+		for(int i = 0; i < closeData.length; i++) {
 			
 			if (i < periods) {
 		        movAvgs.add(null);
@@ -253,7 +285,7 @@ public class BackEnd {
 			double sum = 0.0;
 			
 			for(int j = 0; j < periods; j++) {
-				sum += closeData.get(i - j);
+				sum += closeData[i - j];
 			}
 			
 			movAvgs.add(sum / periods);
@@ -280,12 +312,12 @@ public class BackEnd {
 	//Calculate a standard deviation of a stock.
 	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
 	
-	private List<Double> standardDeviation(List<Double> closeData, int periods) {
+	private List<Double> standardDeviation(double[] closeData, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
 		List<Double> movAvgs = movingAverage(closeData, periods);
 		
-		for(int i = 0; i < closeData.size(); i++) {
+		for(int i = 0; i < closeData.length; i++) {
 			
 			if(i < periods) {
 				stdDevs.add(null);
@@ -297,7 +329,7 @@ public class BackEnd {
 			for(int j = 0; j < periods; j++) {
 				double sum = 0.0;
 				
-				sum += movAvgs.get(i) - closeData.get(i - j);
+				sum += movAvgs.get(i) - closeData[i - j];
 				sumOfSquares += Math.pow( sum, 2);
 			}
 			
@@ -311,7 +343,7 @@ public class BackEnd {
 		return stdDevs;
 	}
 	
-	private List<Double> upperBollingerBand(List<Double> closeData, int periods) {
+	private List<Double> upperBollingerBand(double[] closeData, int periods) {
 		//The middle bollinger band is the moving average
 		List<Double> movAvg = movingAverage(priceData, periods);
 		
@@ -319,7 +351,7 @@ public class BackEnd {
 		
 		List<Double> upBollBand = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.size(); i++) {
+		for(int i = 0; i < closeData.length; i++) {
 			if(i < periods) {
 				upBollBand.add(null);
 				continue;
@@ -331,14 +363,14 @@ public class BackEnd {
 		return upBollBand;
 	}
 	
-	private List<Double> lowerBollingerBand(List<Double> closeData, int periods) {
+	private List<Double> lowerBollingerBand(double[] closeData, int periods) {
 		List<Double> movAvg = movingAverage(priceData, periods);
 		
 		List<Double> stdDev = standardDeviation(priceData, periods);
 		
 		List<Double> lowBollBand = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.size(); i++) {
+		for(int i = 0; i < closeData.length; i++) {
 			if(i < periods) {
 				lowBollBand.add(null);
 				continue;
@@ -402,6 +434,31 @@ public class BackEnd {
 	
 	//Calculate Fibonacci Retracement levels of a stock at 2 points.
 	//Link: https://is.gd/aRjSTM
+	
+	//Get Fibonacci Retracements as a part of the background
+	private List<Double> calculateFibonacciRetracementLevels(double[] highPoints, double[] lowPoints, int fibLevel) {
+		
+		List<Double> fibonnacciRetracementLevels = new LinkedList<>();
+		
+		double range = 0.0;
+		
+		for(int i = 0; i < highPoints.length; i++) {
+			
+			range = highPoints[i] - lowPoints[i];
+			
+			fibonnacciRetracementLevels.add(highPoints[i]);
+			fibonnacciRetracementLevels.add(highPoints[i] - (0.236 * range));
+			fibonnacciRetracementLevels.add(2, highPoints[i] - (0.382 * range));
+			fibonnacciRetracementLevels.add(3, highPoints[i] - (0.5 * range));
+			fibonnacciRetracementLevels.add(4, highPoints[i] - (0.618 * range));
+			fibonnacciRetracementLevels.add(5, highPoints[i] - (0.786 * range));
+			fibonnacciRetracementLevels.add(6, lowPoints[i]);
+		}
+		
+		return fibonnacciRetracementLevels;
+	}
+	
+	/*
 	private double calculateFibonacciRetracementLevels(double highPoint, double lowPoint, int level) {
 		
 		double range = highPoint - lowPoint;
@@ -417,13 +474,30 @@ public class BackEnd {
 		
 		return fibonacciRetracementLevels[level];
 	}
+	*/
 	
 	/*
 	 * Public methods for user access;
 	*/
 	
-	public List<Double> getMovingAverage(List<Double> closeData, int periods) {
+	public List<Double> getMovingAverage(double[] closeData, int periods) {
 		return movingAverage(closeData, periods);
+	}
+	
+	public List<Double> getStandardDeviation(double[] closeData, int periods) {
+		return standardDeviation(closeData, periods);
+	}
+	
+	public List<Double> getUpperBand(double[] closeData, int periods) {
+		return upperBollingerBand(closeData, periods);
+	}
+	
+	public List<Double> getLowerBand(double[] closeData, int periods) {
+		return lowerBollingerBand(closeData, periods);
+	}
+	
+	public List<Double> getFibonnaciLevel(double[] highPrice, double[] lowPrice, int level) {
+		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
 	
 	/*
@@ -431,18 +505,6 @@ public class BackEnd {
 		return movingAverage(priceData, periods);
 	}
 	*/
-	
-	public List<Double> getStandardDeviation(List<Double> closeData, int periods) {
-		return standardDeviation(closeData, periods);
-	}
-	
-	public List<Double> getUpperBand(List<Double> closeData, int periods) {
-		return upperBollingerBand(closeData, periods);
-	}
-	
-	public List<Double> getLowerBand(List<Double> closeData, int periods) {
-		return lowerBollingerBand(closeData, periods);
-	}
 	
 	/*
 	public double getStandardDeviation(List<Double> priceData, int periods) {
@@ -460,11 +522,13 @@ public class BackEnd {
 	}
 	*/
 	
+	/*
 	public double getFibonnaciLevel(double highPrice, double lowPrice, int level) {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
+	*/
 	
-	public List<Double> getPriceData() {
+	public double[] getPriceData() {
 		return priceData;
 	}
 	
@@ -477,15 +541,11 @@ public class BackEnd {
 	}
 	
 	public int priceDataSize() {
-		return priceData.size();
-	}
-	
-	public boolean isDataEmpty() {
-		return priceData.isEmpty();
+		return priceData.length;
 	}
 	
 	public double lastPrice() {
-		return priceData.get(priceData.size()-1);
+		return priceData[priceDataSize()-1];
 	}
 	
 	/*

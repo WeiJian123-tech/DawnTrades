@@ -14,6 +14,7 @@ package Prototype_003;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.awt.Color;
 import java.text.*;
@@ -23,27 +24,25 @@ import java.time.temporal.ChronoField;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.*;
 import org.knowm.xchart.style.Styler.LegendPosition;
-import org.knowm.xchart.internal.*;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		List<Double> yPrices = new ArrayList<>(
-				List.of(
-						
-						/*
-						9.23, 10.50, 8.75, 8.96, 7.70, 8.80, 9.02, 11.01, 10.97, 11.05, 8.08, 8.87, 7.46, 8.03,
-						9.00, 8.64, 8.45, 8.55, 8.99, 8.79, 9.02, 9.55, 10.01, 10.5, 10.25, 10.32, 10.28, 10.29,
-						10.26, 10.30
-						*/
-						
-						
-						10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
-						
-						
-						)
-				);
+		
+		/*
+		9.23, 10.50, 8.75, 8.96, 7.70, 8.80, 9.02, 11.01, 10.97, 11.05, 8.08, 8.87, 7.46, 8.03,
+		9.00, 8.64, 8.45, 8.55, 8.99, 8.79, 9.02, 9.55, 10.01, 10.5, 10.25, 10.32, 10.28, 10.29,
+		10.26, 10.30
+		*/
+		
+		/*
+		 * 10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
+		 */
+		
+		double[] yPrices = new double[] {
+				10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
+		};
 		
 		BackEnd tradeAlgo = new BackEnd(yPrices);
 		
@@ -55,7 +54,7 @@ public class Main {
 		
 	}
 	
-	private OHLCChart OHLCGraph(List<Double> yPrices, BackEnd tradeAlgo) {
+	private OHLCChart OHLCGraph(double[] yPrices, BackEnd tradeAlgo) {
 		
 		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("Project GoldenTrades").build();
 		
@@ -63,72 +62,68 @@ public class Main {
 		chart.getStyler().setYAxisDecimalPattern("##.00");
 		chart.getStyler().setToolTipsEnabled(true);
 		
-		List<Date> xTime = new ArrayList<>();
-		List<Double> openData = new ArrayList<>();
-		List<Double> highData = new ArrayList<>();
-		List<Double> lowData = new ArrayList<>();
-		List<Double> closeData = new ArrayList<>();
+		Date[] xTime = new Date[yPrices.length-1];
+		double[] openData = new double[yPrices.length-1];
+		double[] highData = new double[yPrices.length-1];
+		double[] lowData = new double[yPrices.length-1];
+		double[] closeData = new double[yPrices.length-1];
 		
 		populateData(yPrices, xTime, openData, highData, lowData, closeData);
 		
-		chart.addSeries("Candlestick", xTime, openData, highData, lowData, closeData);
-		chart.addSeries("SMA5", xTime, tradeAlgo.getMovingAverage(closeData, 5));
-		//chart.addSeries("SMA10", xTime, tradeAlgo.getMovingAverage(closeData, 10));
-		//chart.addSeries("SMA15", xTime, tradeAlgo.getMovingAverage(closeData, 15));
+		List<Date> xTimeList = Arrays.stream(xTime).collect(Collectors.toList());
+		List<Double> openDataList = Arrays.stream(openData).boxed().collect(Collectors.toList());
+		List<Double> highDataList = Arrays.stream(highData).boxed().collect(Collectors.toList());
+		List<Double> lowDataList = Arrays.stream(lowData).boxed().collect(Collectors.toList());
+		List<Double> closeDataList = Arrays.stream(closeData).boxed().collect(Collectors.toList());
 		
-		chart.addSeries("stdDev", xTime, tradeAlgo.getStandardDeviation(closeData, 5));
-		chart.addSeries("Upper Bollinger Band", xTime, tradeAlgo.getUpperBand(closeData, 5));
-		chart.addSeries("Lower Bollinger Band", xTime, tradeAlgo.getLowerBand(closeData, 5));
+		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
+		chart.addSeries("Candlestick", xTimeList, openDataList, highDataList, lowDataList, closeDataList);
+		chart.addSeries("SMA5", xTimeList, tradeAlgo.getMovingAverage(closeData, 5));
+		//chart.addSeries("SMA10", xTimeList, tradeAlgo.getMovingAverage(closeData, 10));
+		//chart.addSeries("SMA15", xTimeList, tradeAlgo.getMovingAverage(closeData, 15));
+		
+		//chart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closeData, 5));
+		//chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
+		//chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5));
+		
+		/*
+		System.out.println(tradeAlgo.getFibonnaciLevel(highData, lowData, 0).size());
+		chart.addSeries("Fibonnacci Levels", xTimeList, tradeAlgo.getFibonnaciLevel(highData, lowData, 0));
+		*/
+		
+		//chart.addSeries("MACD", xTime, tradeAlgo.calcMACD(closeData, 12, 26, 9));
 		
 		return chart;
 	}
 	
-	private static void populateData(
-			List<Double> yPrices, List<Date> xTime, List<Double> openData,
-			List<Double> highData, List<Double> lowData, List<Double> closeData
-			) {
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		try {
-			Date todaysDate = sdf.parse("2023-06-01");
-			
-			populateData(todaysDate, yPrices, xTime, openData, highData, lowData, closeData);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
 	public static void populateData(
-			Date startDate, List<Double> yPrices, List<Date> xTime, List<Double> openData,
-			List<Double> highData, List<Double> lowData, List<Double> closeData
+			double[] yPrices, Date[] xTime, double[] openData,
+			double[] highData, double[] lowData, double[] closeData
 			) {
 		
 		Calendar cal = Calendar.getInstance();
 		
-		cal.setTime(startDate);
+		cal.setTime(cal.getTime());
 		
-		double data = yPrices.get(0);
+		double data = yPrices[0];
 		
-		for(int i = 0; i < yPrices.size()-1; i++) {
+		for(int i = 0; i < yPrices.length-1; i++) {
 			
 			cal.add(Calendar.DATE, 1);
 			
-			xTime.add(cal.getTime());
+			xTime[i] = cal.getTime();
 			
-			double previous = yPrices.get(i);
+			double previous = yPrices[i];
 			
-			data = getNewClose(yPrices.get(i+1));
+			data = getNewClose(yPrices[i+1]);
 			
-			openData.add(previous);
+			openData[i] = previous;
 			
-			highData.add( getHigh(Math.max(previous, data), yPrices.get(i+1)) );
+			highData[i] = getHigh(Math.max(previous, data), yPrices[i+1]);
 			
-			lowData.add( getLow(Math.min(previous, data), yPrices.get(i+1)) );
+			lowData[i] = getLow(Math.min(previous, data), yPrices[i+1]);
 			
-			closeData.add(data);
+			closeData[i] = data;
 		}
 		
 	}
