@@ -5,6 +5,7 @@ package Prototype_003;
  */
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackEnd {
 
@@ -216,7 +217,7 @@ public class BackEnd {
 		return ema;
   	}
 	
-	public static double calculateMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
+	private double calculateMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
 		double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
 		double[] longEMA = calculateEMA(closingPrices, longPeriod);
 
@@ -231,6 +232,16 @@ public class BackEnd {
 		int lastSignalIndex = signalLine.length - 1;
 		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
   	}
+	
+	private List<Double> calcMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
+		List<Double> macdList = new ArrayList<>();
+		
+		for(int i = 0; i < closingPrices.length; i++) {
+			macdList.add(calculateMACD(closingPrices, shortPeriod, longPeriod, signalPeriod));
+		}
+		
+		return macdList;
+	}
 
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
@@ -447,10 +458,12 @@ public class BackEnd {
 	*/
 	
 	/*
-	 * Public methods for user access;
+	 * Public methods for user access:
+	 * 
+	 * Should return List<Double> for .addSeries() in `Main.java`
 	*/
 	
-	public List<Double> getMovingAverage(double[] closeData, int periods) {
+	public List<Double> getSimpleMovingAverage(double[] closeData, int periods) {
 		return movingAverage(closeData, periods);
 	}
 	
@@ -468,6 +481,18 @@ public class BackEnd {
 	
 	public List<Double> getFibonnaciLevel(double[] highPrice, double[] lowPrice, int level) {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
+	}
+	
+	public List<Double> getMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
+		return calcMACD(closingPrices, shortPeriod, longPeriod, signalPeriod);
+	}
+	
+	public List<Double> getEMA(double[] closeData, int periods) {
+		return Arrays.stream(calculateEMA(closeData, periods)).boxed().collect(Collectors.toList());
+	}
+	
+	public List<Double> getRSI(double[] closeData, int periods) {
+		return Arrays.stream(calculateRSI(closeData, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	/*

@@ -78,9 +78,9 @@ public class Main {
 		
 		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
 		chart.addSeries("Candlestick", xTimeList, openDataList, highDataList, lowDataList, closeDataList);
-		chart.addSeries("SMA5", xTimeList, tradeAlgo.getMovingAverage(closeData, 5));
-		//chart.addSeries("SMA10", xTimeList, tradeAlgo.getMovingAverage(closeData, 10));
-		//chart.addSeries("SMA15", xTimeList, tradeAlgo.getMovingAverage(closeData, 15));
+		chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 5));
+		//chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 10));
+		//chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 15));
 		
 		//chart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closeData, 5));
 		//chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
@@ -91,7 +91,11 @@ public class Main {
 		chart.addSeries("Fibonnacci Levels", xTimeList, tradeAlgo.getFibonnaciLevel(highData, lowData, 0));
 		*/
 		
-		//chart.addSeries("MACD", xTime, tradeAlgo.calcMACD(closeData, 12, 26, 9));
+		//Common MACD: 12, 26, 9
+		
+		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9));
+		chart.addSeries("EMA", xTimeList, tradeAlgo.getEMA(closeData, 5));
+		chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
 		
 		return chart;
 	}
