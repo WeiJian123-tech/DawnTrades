@@ -203,57 +203,61 @@ public class BackEnd {
       		return rsiValues;
   	}
 	
-//THE RSI LINE TO BE PLOTTED IN FRONT END	
-  public List<Double> calculateRSILine(double[] closingPrices, int periodLength) {
-    List<Double> rsiValues = new ArrayList<Double>();
+  	//THE RSI LINE TO BE PLOTTED IN FRONT END	
+  	public List<Double> calculateRSILine(double[] closingPrices, int periodLength) {
+  		List<Double> rsiValues = new ArrayList<Double>();
 
-    double prevAvgGain = 0;
-    double prevAvgLoss = 0;
-    double relativeStrength = 0;
-    double rsi = 0;
+  		double prevAvgGain = 0.0;
+  		double prevAvgLoss = 0.0;
+  		double relativeStrength = 0.0;
+  		double rsi = 0.0;
+  		
+  		for(int i = 0; i < periodLength; i++) {
+  			rsiValues.add(null);
+  		}
 
-      for (int i = periodLength; i < closingPrices.length; i++) {
-        if(i == periodLength){
-          double gainSum = 0.0;
-          double lossSum = 0.0;
+  		for (int i = periodLength; i < closingPrices.length; i++) {
+  			if(i == periodLength){
+  				double gainSum = 0.0;
+  				double lossSum = 0.0;
     
-          for (int j = i - periodLength; j < i; j++) {
-            double priceDiff = closingPrices[j + 1] - closingPrices[j];
-            if (priceDiff > 0) {
-              gainSum += priceDiff;
-            } else {
-              lossSum -= priceDiff;
-            }
-          }
+  				for (int j = i - periodLength; j < i; j++) {
+  					double priceDiff = closingPrices[j + 1] - closingPrices[j];
+  					if (priceDiff > 0) {
+  						gainSum += priceDiff;
+  					} else {
+  						lossSum -= priceDiff;
+  					}
+  				}
     
-          double averageGain = gainSum / periodLength;
-          double averageLoss = lossSum / periodLength;
-          prevAvgGain = averageGain;
-          prevAvgLoss = averageLoss;
+  				double averageGain = gainSum / periodLength;
+  				double averageLoss = lossSum / periodLength;
+  				prevAvgGain = averageGain;
+  				prevAvgLoss = averageLoss;
     
-          relativeStrength = averageGain / averageLoss;
-          rsi = 100 - (100 / (1 + relativeStrength));
+  				relativeStrength = averageGain / averageLoss;
+  				rsi = 100 - (100 / (1 + relativeStrength));
     
-          rsiValues.add(i, rsi);
-        } else if(i > periodLength){
-          double diff = closingPrices[i] - closingPrices[i - 1];
-          double currGain = diff > 0 ? diff : 0;
-          double currLoss = diff < 0 ? Math.abs(diff) : 0;
-          prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
-          prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
-          relativeStrength = prevAvgGain / prevAvgLoss;
+  				rsiValues.add(i, rsi);
+  			} else if(i > periodLength){
+  				double diff = closingPrices[i] - closingPrices[i - 1];
+  				double currGain = diff > 0 ? diff : 0;
+  				double currLoss = diff < 0 ? Math.abs(diff) : 0;
+  				prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
+  				prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
+  				relativeStrength = prevAvgGain / prevAvgLoss;
           
-          rsi = 100 - (100 / (1 + relativeStrength));
+  				rsi = 100 - (100 / (1 + relativeStrength));
 
-          rsiValues.add(i, rsi);
-        }
-      }
+  				rsiValues.add(i, rsi);
+  			}
+  		}
     
-    return rsiValues;
-  }
+  		return rsiValues;
+  	}
 	
-  //MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
-	private static double[] calculateEMA(double[] closingPrices, int period) {
+  	//MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
+  	private static double[] calculateEMA(double[] closingPrices, int period) {
 		double[] ema = new double[closingPrices.length];
 		
 		double multiplier = 2.0 / (period + 1);
@@ -282,6 +286,7 @@ public class BackEnd {
 		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
   	}
 	
+	/*
 	private List<Double> calcMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
 		List<Double> macdList = new ArrayList<>();
 		
@@ -291,30 +296,51 @@ public class BackEnd {
 		
 		return macdList;
 	}
+	*/
 	
-	  public static List<Double> calculateEMALine(double[] closingPrices, int period) {
-	    List<Double> ema = new ArrayList<Double>();
-	    double multiplier = 2.0 / (period + 1);
-	    ema.add(0,closingPrices[0]);
-
-	    for (int i = 1; i < closingPrices.length; i++) {
-	      ema.add(i, (closingPrices[i] - ema.get(i - 1) * multiplier + ema.get(i - 1)));
-	    }
-
-	    return ema;
+	//Front End EMA method  Link: https://is.gd/m2Q5WI
+	public List<Double> calculateEMALine(double[] closingPrices, int periods) {
+		
+		List<Double> ema = new ArrayList<>();
+		
+		for(int i = 0; i < periods; i++) {
+			ema.add(null);
+		}
+		
+		ema.add(periods, closingPrices[0]);
+		
+		for(int j = periods + 1; j < closingPrices.length; j++) {
+			double multiplier = 2.0 / (periods + 1.0);
+			
+			ema.add( (closingPrices[j] * multiplier) + (ema.get(j - 1) * (1 - multiplier)));
+		}
+		
+		return ema;
   	}
+	
+	//Front end MACD method
+	public List<Double> calculateMACDLine(
+			double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod, int periods
+			) {
+		double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
+		double[] longEMA = calculateEMA(closingPrices, longPeriod);
 
-	  public static List<Double> calculateMACDLine(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod){
-	    double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
-	    double[] longEMA = calculateEMA(closingPrices, longPeriod);
-
-	    int minPeriod = Math.min(shortEMA.length, longEMA.length);
-	    List<Double> macdLine = new ArrayList<Double>();
-	    for (int i = 0; i < minPeriod; i++) {
-	      macdLine.add(i, (shortEMA[i] - longEMA[i]));
-	    }
-	    return macdLine;
-	  }
+		int minPeriod = Math.min(shortEMA.length, longEMA.length);
+		
+		//Signal period is the 9 day EMA. When MACD line crosses signal line, it indicates a buy or sell.
+		
+		List<Double> macdLine = new ArrayList<Double>();
+		
+		for(int i = 0; i < periods; i++) {
+			macdLine.add(null);
+		}
+		
+		for (int j = periods; j < minPeriod; j++) {
+			macdLine.add( (shortEMA[j] - longEMA[j]));
+		}
+		
+		return macdLine;
+	}
 
 
 	//Coding short term predictions via Technical Analysis.
@@ -332,10 +358,13 @@ public class BackEnd {
 		
 		for(int i = 0; i < closeData.length; i++) {
 			
+			//Adds null elements until period.
 			if (i < periods) {
 		        movAvgs.add(null);
 		        continue;
 		      }
+			
+			//Then adds to the sum the elements from index i - j to the array.
 			
 			double sum = 0.0;
 			
@@ -557,16 +586,20 @@ public class BackEnd {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
 	
-	public List<Double> getMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
-		return calcMACD(closingPrices, shortPeriod, longPeriod, signalPeriod);
+	public List<Double> getMACD(
+			double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod, int periods
+			) {
+		return calculateMACDLine(closingPrices, shortPeriod, longPeriod, signalPeriod, periods);
 	}
 	
 	public List<Double> getEMA(double[] closeData, int periods) {
-		return Arrays.stream(calculateEMA(closeData, periods)).boxed().collect(Collectors.toList());
+		return calculateEMALine(closeData, periods);
+		//return Arrays.stream(calculateEMA(closeData, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	public List<Double> getRSI(double[] closeData, int periods) {
-		return Arrays.stream(calculateRSI(closeData, periods)).boxed().collect(Collectors.toList());
+		return calculateRSILine(closeData, periods);
+		//return Arrays.stream(calculateRSI(closeData, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	/*

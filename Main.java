@@ -41,7 +41,9 @@ public class Main {
 		 */
 		
 		double[] yPrices = new double[] {
-				10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
+				9.23, 10.50, 8.75, 8.96, 7.70, 8.80, 9.02, 11.01, 10.97, 11.05, 8.08, 8.87, 7.46, 8.03,
+				9.00, 8.64, 8.45, 8.55, 8.99, 8.79, 9.02, 9.55, 10.01, 10.5, 10.25, 10.32, 10.28, 10.29,
+				10.26, 10.30
 		};
 		
 		BackEnd tradeAlgo = new BackEnd(yPrices);
@@ -93,7 +95,7 @@ public class Main {
 		
 		//Common MACD: 12, 26, 9
 		
-		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9));
+		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
 		chart.addSeries("EMA", xTimeList, tradeAlgo.getEMA(closeData, 5));
 		chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
 		
