@@ -5,7 +5,6 @@ package Prototype_003;
  */
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BackEnd {
 
@@ -203,59 +202,6 @@ public class BackEnd {
       		return rsiValues;
   	}
 	
-  	//THE RSI LINE TO BE PLOTTED IN FRONT END	
-  	public List<Double> calculateRSILine(double[] closingPrices, int periodLength) {
-  		List<Double> rsiValues = new ArrayList<Double>();
-
-  		double prevAvgGain = 0.0;
-  		double prevAvgLoss = 0.0;
-  		double relativeStrength = 0.0;
-  		double rsi = 0.0;
-  		
-  		for(int i = 0; i < periodLength; i++) {
-  			rsiValues.add(null);
-  		}
-
-  		for (int i = periodLength; i < closingPrices.length; i++) {
-  			if(i == periodLength){
-  				double gainSum = 0.0;
-  				double lossSum = 0.0;
-    
-  				for (int j = i - periodLength; j < i; j++) {
-  					double priceDiff = closingPrices[j + 1] - closingPrices[j];
-  					if (priceDiff > 0) {
-  						gainSum += priceDiff;
-  					} else {
-  						lossSum -= priceDiff;
-  					}
-  				}
-    
-  				double averageGain = gainSum / periodLength;
-  				double averageLoss = lossSum / periodLength;
-  				prevAvgGain = averageGain;
-  				prevAvgLoss = averageLoss;
-    
-  				relativeStrength = averageGain / averageLoss;
-  				rsi = 100 - (100 / (1 + relativeStrength));
-    
-  				rsiValues.add(i, rsi);
-  			} else if(i > periodLength){
-  				double diff = closingPrices[i] - closingPrices[i - 1];
-  				double currGain = diff > 0 ? diff : 0;
-  				double currLoss = diff < 0 ? Math.abs(diff) : 0;
-  				prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
-  				prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
-  				relativeStrength = prevAvgGain / prevAvgLoss;
-          
-  				rsi = 100 - (100 / (1 + relativeStrength));
-
-  				rsiValues.add(i, rsi);
-  			}
-  		}
-    
-  		return rsiValues;
-  	}
-	
   	//MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
   	private static double[] calculateEMA(double[] closingPrices, int period) {
 		double[] ema = new double[closingPrices.length];
@@ -341,6 +287,59 @@ public class BackEnd {
 		
 		return macdLine;
 	}
+	
+	//THE RSI LINE TO BE PLOTTED IN FRONT END	
+  	public List<Double> calculateRSILine(double[] closingPrices, int periodLength) {
+  		List<Double> rsiValues = new ArrayList<Double>();
+
+  		double prevAvgGain = 0.0;
+  		double prevAvgLoss = 0.0;
+  		double relativeStrength = 0.0;
+  		double rsi = 0.0;
+  		
+  		for(int i = 0; i < periodLength; i++) {
+  			rsiValues.add(null);
+  		}
+
+  		for (int i = periodLength; i < closingPrices.length; i++) {
+  			if(i == periodLength){
+  				double gainSum = 0.0;
+  				double lossSum = 0.0;
+    
+  				for (int j = i - periodLength; j < i; j++) {
+  					double priceDiff = closingPrices[j + 1] - closingPrices[j];
+  					if (priceDiff > 0) {
+  						gainSum += priceDiff;
+  					} else {
+  						lossSum -= priceDiff;
+  					}
+  				}
+    
+  				double averageGain = gainSum / periodLength;
+  				double averageLoss = lossSum / periodLength;
+  				prevAvgGain = averageGain;
+  				prevAvgLoss = averageLoss;
+    
+  				relativeStrength = averageGain / averageLoss;
+  				rsi = 100 - (100 / (1 + relativeStrength));
+    
+  				rsiValues.add(i, rsi);
+  			} else if(i > periodLength){
+  				double diff = closingPrices[i] - closingPrices[i - 1];
+  				double currGain = diff > 0 ? diff : 0;
+  				double currLoss = diff < 0 ? Math.abs(diff) : 0;
+  				prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
+  				prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
+  				relativeStrength = prevAvgGain / prevAvgLoss;
+          
+  				rsi = 100 - (100 / (1 + relativeStrength));
+
+  				rsiValues.add(i, rsi);
+  			}
+  		}
+    
+  		return rsiValues;
+  	}
 
 
 	//Coding short term predictions via Technical Analysis.
@@ -352,7 +351,7 @@ public class BackEnd {
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
 	//Gets closing price data
-	private List<Double> movingAverage(double[] closeData, int periods) {
+	private List<Double> simpleMovingAverage(double[] closeData, int periods) {
 		
 		List<Double> movAvgs = new ArrayList<>();
 		
@@ -399,7 +398,7 @@ public class BackEnd {
 	private List<Double> standardDeviation(double[] closeData, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
-		List<Double> movAvgs = movingAverage(closeData, periods);
+		List<Double> movAvgs = simpleMovingAverage(closeData, periods);
 		
 		for(int i = 0; i < closeData.length; i++) {
 			
@@ -429,7 +428,7 @@ public class BackEnd {
 	
 	private List<Double> upperBollingerBand(double[] closeData, int periods) {
 		//The middle bollinger band is the moving average
-		List<Double> movAvg = movingAverage(priceData, periods);
+		List<Double> movAvg = simpleMovingAverage(priceData, periods);
 		
 		List<Double> stdDev = standardDeviation(priceData, periods);
 		
@@ -448,7 +447,7 @@ public class BackEnd {
 	}
 	
 	private List<Double> lowerBollingerBand(double[] closeData, int periods) {
-		List<Double> movAvg = movingAverage(priceData, periods);
+		List<Double> movAvg = simpleMovingAverage(priceData, periods);
 		
 		List<Double> stdDev = standardDeviation(priceData, periods);
 		
@@ -516,34 +515,18 @@ public class BackEnd {
 	}
 	*/
 	
-	//Calculate Fibonacci Retracement levels of a stock at 2 points.
-	//Link: https://is.gd/aRjSTM
-	
-	//Get Fibonacci Retracements as a part of the background
-	private List<Double> calculateFibonacciRetracementLevels(double[] highPoints, double[] lowPoints, int fibLevel) {
-		
-		List<Double> fibonnacciRetracementLevels = new LinkedList<>();
-		
-		double range = 0.0;
-		
-		for(int i = 0; i < highPoints.length; i++) {
-			
-			range = highPoints[i] - lowPoints[i];
-			
-			fibonnacciRetracementLevels.add(highPoints[i]);
-			fibonnacciRetracementLevels.add(highPoints[i] - (0.236 * range));
-			fibonnacciRetracementLevels.add(2, highPoints[i] - (0.382 * range));
-			fibonnacciRetracementLevels.add(3, highPoints[i] - (0.5 * range));
-			fibonnacciRetracementLevels.add(4, highPoints[i] - (0.618 * range));
-			fibonnacciRetracementLevels.add(5, highPoints[i] - (0.786 * range));
-			fibonnacciRetracementLevels.add(6, lowPoints[i]);
-		}
-		
-		return fibonnacciRetracementLevels;
-	}
+	//Calculate Fibonacci Retracement levels of a stock at 2 points. Updates only when a new high or low is detected.
+	//Links: https://is.gd/aRjSTM && https://is.gd/D0sR5w
+	//Discontinued until xChart updates with AnnotationLine features that allow for specific coordinate positions.
 	
 	/*
-	private double calculateFibonacciRetracementLevels(double highPoint, double lowPoint, int level) {
+	private List<Double> calculateFibonacciRetracementLevels(double[] highPoints, double[] lowPoints, int fibLevel) {
+		
+		List<Double> highPointsList = Arrays.stream(highPoints).boxed().collect(Collectors.toList());
+		double highPoint = highPointsList.stream().mapToDouble(d -> d).max().getAsDouble();
+		
+		List<Double> lowPointsList = Arrays.stream(lowPoints).boxed().collect(Collectors.toList());
+		double lowPoint = lowPointsList.stream().mapToDouble(d -> d).min().getAsDouble();
 		
 		double range = highPoint - lowPoint;
 		
@@ -556,7 +539,25 @@ public class BackEnd {
 		fibonacciRetracementLevels[5] = highPoint - (0.786 * range);
 		fibonacciRetracementLevels[6] = lowPoint;
 		
-		return fibonacciRetracementLevels[level];
+		return Arrays.stream(fibonacciRetracementLevels).boxed().collect(Collectors.toList());
+	}
+	*/
+	
+	/*
+	private double calculateFibonacciRetracementLevels(double highPoint, double lowPoint, int fibLevel) {
+		
+		double range = highPoint - lowPoint;
+		
+		//Common levels from a high of 100% to a low of 0%;
+		fibonacciRetracementLevels[0] = highPoint;
+		fibonacciRetracementLevels[1] = highPoint - (0.236 * range);
+		fibonacciRetracementLevels[2] = highPoint - (0.382 * range);
+		fibonacciRetracementLevels[3] = highPoint - (0.5 * range);
+		fibonacciRetracementLevels[4] = highPoint - (0.618 * range);
+		fibonacciRetracementLevels[5] = highPoint - (0.786 * range);
+		fibonacciRetracementLevels[6] = lowPoint;
+		
+		return fibonacciRetracementLevels[fibLevel];
 	}
 	*/
 	
@@ -567,7 +568,7 @@ public class BackEnd {
 	*/
 	
 	public List<Double> getSimpleMovingAverage(double[] closeData, int periods) {
-		return movingAverage(closeData, periods);
+		return simpleMovingAverage(closeData, periods);
 	}
 	
 	public List<Double> getStandardDeviation(double[] closeData, int periods) {
@@ -580,10 +581,6 @@ public class BackEnd {
 	
 	public List<Double> getLowerBand(double[] closeData, int periods) {
 		return lowerBollingerBand(closeData, periods);
-	}
-	
-	public List<Double> getFibonnaciLevel(double[] highPrice, double[] lowPrice, int level) {
-		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
 	
 	public List<Double> getMACD(
@@ -601,6 +598,12 @@ public class BackEnd {
 		return calculateRSILine(closeData, periods);
 		//return Arrays.stream(calculateRSI(closeData, periods)).boxed().collect(Collectors.toList());
 	}
+	
+	/*
+	public List<Double> getFibonnaciLevel(double[] highPrice, double[] lowPrice, int level) {
+		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
+	}
+	*/
 	
 	/*
 	public double getMovingAverage(List<Double> priceData, int periods) {

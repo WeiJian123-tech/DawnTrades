@@ -15,14 +15,9 @@ package Prototype_003;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.awt.Color;
-import java.text.*;
-import java.time.*;
-import java.time.temporal.ChronoField;
 
 import org.knowm.xchart.*;
-import org.knowm.xchart.style.*;
+import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 public class Main {
@@ -60,7 +55,8 @@ public class Main {
 		
 		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("Project GoldenTrades").build();
 		
-		chart.getStyler().setLegendPosition(LegendPosition.InsideS);
+		chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
+		chart.getStyler().setLegendLayout(LegendLayout.Vertical);
 		chart.getStyler().setYAxisDecimalPattern("##.00");
 		chart.getStyler().setToolTipsEnabled(true);
 		
@@ -88,16 +84,12 @@ public class Main {
 		//chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
 		//chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5));
 		
-		/*
-		System.out.println(tradeAlgo.getFibonnaciLevel(highData, lowData, 0).size());
-		chart.addSeries("Fibonnacci Levels", xTimeList, tradeAlgo.getFibonnaciLevel(highData, lowData, 0));
-		*/
-		
 		//Common MACD: 12, 26, 9
 		
-		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
-		chart.addSeries("EMA", xTimeList, tradeAlgo.getEMA(closeData, 5));
-		chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
+		//chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
+		//chart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closeData, 9));
+		//chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closeData, 5));
+		//chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
 		
 		return chart;
 	}
