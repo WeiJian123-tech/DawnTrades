@@ -101,6 +101,30 @@ public class BackEnd {
   		return null;
   	}
 
+	//5 Main Types of Doji Candlesticks are detected instead of just regular Dojis
+	  public String detectDojiVariations(String date, float open, float high, float low, float close) {
+	    float bodyLength = Math.abs(close - open);
+	    float totalLength = high - low;
+	    float upperShadow = Math.abs(high - Math.max(open, close));
+	    float lowerShadow = Math.abs(Math.min(open, close) - low);
+
+	    if (bodyLength <= totalLength * 0.1 && upperShadow >= totalLength * 0.4 && lowerShadow >= totalLength * 0.4) {
+	      return date + " Long-Legged Doji Detected";
+	    } else if ((bodyLength < totalLength * 0.1) && (lowerShadow > (3 * bodyLength)) &&
+	      (upperShadow < bodyLength)) {
+	      return date + " Dragon Fly Doji Detected";
+	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * bodyLength)) &&
+	      (lowerShadow <= bodyLength)) {
+	      return date + " Gravestone Doji Detected";
+	    } else if (bodyLength <= totalLength * 0.1 && upperShadow == 0 && lowerShadow == 0) {
+	      return date + " Four-Price Doji Detected";
+	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * Math.abs(close - open))) &&
+	      (lowerShadow > (3 * bodyLength))) {
+	      return date + " Regular Doji Detetced";
+	    }
+	    return null;
+	  }
+
   	public String detectEngulf(
 		String date, float open, float high, float low, float close,
 		float prevOpen, float prevHigh, float prevLow, float prevClose
