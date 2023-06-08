@@ -108,7 +108,11 @@ public class BackEnd {
 	    double upperShadow = Math.abs(high - Math.max(open, close));
 	    double lowerShadow = Math.abs(Math.min(open, close) - low);
 
-	    if (bodyLength <= totalLength * 0.1 && upperShadow >= totalLength * 0.4 && lowerShadow >= totalLength * 0.4) {
+	    if (
+	    		bodyLength <= totalLength * 0.1 &&
+	    		upperShadow >= totalLength * 0.4 &&
+	    		lowerShadow >= totalLength * 0.4
+	    		) {
 	      return date + " Long-Legged Doji Detected";
 	    } else if ((bodyLength < totalLength * 0.1) && (lowerShadow > (3 * bodyLength)) &&
 	      (upperShadow < bodyLength)) {
@@ -178,7 +182,7 @@ public class BackEnd {
 	}
 	
 	// RSI CALCULATION ALGORITHM
-  	public double[] calculateRSI(double[] closingPrices, int periodLength) {
+  	public double[] calculateRSI(double[] closingPrices, int periods) {
       		double[] rsiValues = new double[closingPrices.length];
 
       		double prevAvgGain = 0;
@@ -186,12 +190,12 @@ public class BackEnd {
       		double relativeStrength = 0;
       		double rsi = 0;
 
-      		for (int i = periodLength; i < closingPrices.length; i++) {
-          		if (i == periodLength) {
+      		for (int i = periods; i < closingPrices.length; i++) {
+          		if (i == periods) {
               			double gainSum = 0.0;
               			double lossSum = 0.0;
 
-              			for (int j = i - periodLength; j < i; j++) {
+              			for (int j = i - periods; j < i; j++) {
                   		double priceDiff = closingPrices[j + 1] - closingPrices[j];
                   			if (priceDiff > 0) {
                       				gainSum += priceDiff;
@@ -200,8 +204,8 @@ public class BackEnd {
                   			}
               			}
 
-              			double averageGain = gainSum / periodLength;
-              			double averageLoss = lossSum / periodLength;
+              			double averageGain = gainSum / periods;
+              			double averageLoss = lossSum / periods;
               			prevAvgGain = averageGain;
               			prevAvgLoss = averageLoss;
 
@@ -209,12 +213,12 @@ public class BackEnd {
               			rsi = 100 - (100 / (1 + relativeStrength));
 
               			rsiValues[i] = rsi;
-          		} else if (i > periodLength) {
+          		} else if (i > periods) {
               			double diff = closingPrices[i] - closingPrices[i - 1];
               			double currGain = diff > 0 ? diff : 0;
               			double currLoss = diff < 0 ? Math.abs(diff) : 0;
-              			prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
-              			prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
+              			prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
+              			prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
               			relativeStrength = prevAvgGain / prevAvgLoss;
 
               			rsi = 100 - (100 / (1 + relativeStrength));
@@ -227,10 +231,10 @@ public class BackEnd {
   	}
 	
   	//MACD CALCULATION ALGORITHM (AND SEPARATE EMA ALGORITHM)
-  	private static double[] calculateEMA(double[] closingPrices, int period) {
+  	private static double[] calculateEMA(double[] closingPrices, int periods) {
 		double[] ema = new double[closingPrices.length];
 		
-		double multiplier = 2.0 / (period + 1);
+		double multiplier = 2.0 / (periods + 1);
 		ema[0] = closingPrices[0];
 		
 		for (int i = 1; i < closingPrices.length; i++) {
@@ -313,7 +317,7 @@ public class BackEnd {
 	}
 	
 	//THE RSI LINE TO BE PLOTTED IN FRONT END	
-  	public List<Double> calculateRSILine(double[] closingPrices, int periodLength) {
+  	public List<Double> calculateRSILine(double[] closingPrices, int periods) {
   		List<Double> rsiValues = new ArrayList<Double>();
 
   		double prevAvgGain = 0.0;
@@ -321,16 +325,16 @@ public class BackEnd {
   		double relativeStrength = 0.0;
   		double rsi = 0.0;
   		
-  		for(int i = 0; i < periodLength; i++) {
+  		for(int i = 0; i < periods; i++) {
   			rsiValues.add(null);
   		}
 
-  		for (int i = periodLength; i < closingPrices.length; i++) {
-  			if(i == periodLength){
+  		for (int i = periods; i < closingPrices.length; i++) {
+  			if(i == periods){
   				double gainSum = 0.0;
   				double lossSum = 0.0;
     
-  				for (int j = i - periodLength; j < i; j++) {
+  				for (int j = i - periods; j < i; j++) {
   					double priceDiff = closingPrices[j + 1] - closingPrices[j];
   					if (priceDiff > 0) {
   						gainSum += priceDiff;
@@ -339,8 +343,8 @@ public class BackEnd {
   					}
   				}
     
-  				double averageGain = gainSum / periodLength;
-  				double averageLoss = lossSum / periodLength;
+  				double averageGain = gainSum / periods;
+  				double averageLoss = lossSum / periods;
   				prevAvgGain = averageGain;
   				prevAvgLoss = averageLoss;
     
@@ -348,12 +352,12 @@ public class BackEnd {
   				rsi = 100 - (100 / (1 + relativeStrength));
     
   				rsiValues.add(i, rsi);
-  			} else if(i > periodLength){
+  			} else if(i > periods){
   				double diff = closingPrices[i] - closingPrices[i - 1];
   				double currGain = diff > 0 ? diff : 0;
   				double currLoss = diff < 0 ? Math.abs(diff) : 0;
-  				prevAvgGain = (prevAvgGain * (periodLength - 1) + currGain) / periodLength;
-  				prevAvgLoss = (prevAvgLoss * (periodLength - 1) + currLoss) / periodLength;
+  				prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
+  				prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
   				relativeStrength = prevAvgGain / prevAvgLoss;
           
   				rsi = 100 - (100 / (1 + relativeStrength));
@@ -375,11 +379,11 @@ public class BackEnd {
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
 	//Gets closing price data
-	private List<Double> simpleMovingAverage(double[] closeData, int periods) {
+	private List<Double> simpleMovingAverage(double[] closingPrices, int periods) {
 		
 		List<Double> movAvgs = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.length; i++) {
+		for(int i = 0; i < closingPrices.length; i++) {
 			
 			//Adds null elements until period.
 			if (i < periods) {
@@ -392,7 +396,7 @@ public class BackEnd {
 			double sum = 0.0;
 			
 			for(int j = 0; j < periods; j++) {
-				sum += closeData[i - j];
+				sum += closingPrices[i - j];
 			}
 			
 			movAvgs.add(sum / periods);
@@ -419,12 +423,12 @@ public class BackEnd {
 	//Calculate a standard deviation of a stock.
 	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
 	
-	private List<Double> standardDeviation(double[] closeData, int periods) {
+	private List<Double> standardDeviation(double[] closingPrices, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
-		List<Double> movAvgs = simpleMovingAverage(closeData, periods);
+		List<Double> movAvgs = simpleMovingAverage(closingPrices, periods);
 		
-		for(int i = 0; i < closeData.length; i++) {
+		for(int i = 0; i < closingPrices.length; i++) {
 			
 			if(i < periods) {
 				stdDevs.add(null);
@@ -436,7 +440,7 @@ public class BackEnd {
 			for(int j = 0; j < periods; j++) {
 				double sum = 0.0;
 				
-				sum += movAvgs.get(i) - closeData[i - j];
+				sum += movAvgs.get(i) - closingPrices[i - j];
 				sumOfSquares += Math.pow( sum, 2);
 			}
 			
@@ -450,7 +454,7 @@ public class BackEnd {
 		return stdDevs;
 	}
 	
-	private List<Double> upperBollingerBand(double[] closeData, int periods) {
+	private List<Double> upperBollingerBand(double[] closingPrices, int periods) {
 		//The middle bollinger band is the moving average
 		List<Double> movAvg = simpleMovingAverage(priceData, periods);
 		
@@ -458,7 +462,7 @@ public class BackEnd {
 		
 		List<Double> upBollBand = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.length; i++) {
+		for(int i = 0; i < closingPrices.length; i++) {
 			if(i < periods) {
 				upBollBand.add(null);
 				continue;
@@ -470,14 +474,14 @@ public class BackEnd {
 		return upBollBand;
 	}
 	
-	private List<Double> lowerBollingerBand(double[] closeData, int periods) {
+	private List<Double> lowerBollingerBand(double[] closingPrices, int periods) {
 		List<Double> movAvg = simpleMovingAverage(priceData, periods);
 		
 		List<Double> stdDev = standardDeviation(priceData, periods);
 		
 		List<Double> lowBollBand = new ArrayList<>();
 		
-		for(int i = 0; i < closeData.length; i++) {
+		for(int i = 0; i < closingPrices.length; i++) {
 			if(i < periods) {
 				lowBollBand.add(null);
 				continue;
@@ -591,20 +595,20 @@ public class BackEnd {
 	 * Should return List<Double> for .addSeries() in `Main.java`
 	*/
 	
-	public List<Double> getSimpleMovingAverage(double[] closeData, int periods) {
-		return simpleMovingAverage(closeData, periods);
+	public List<Double> getSimpleMovingAverage(double[] closingPrices, int periods) {
+		return simpleMovingAverage(closingPrices, periods);
 	}
 	
-	public List<Double> getStandardDeviation(double[] closeData, int periods) {
-		return standardDeviation(closeData, periods);
+	public List<Double> getStandardDeviation(double[] closingPrices, int periods) {
+		return standardDeviation(closingPrices, periods);
 	}
 	
-	public List<Double> getUpperBand(double[] closeData, int periods) {
-		return upperBollingerBand(closeData, periods);
+	public List<Double> getUpperBand(double[] closingPrices, int periods) {
+		return upperBollingerBand(closingPrices, periods);
 	}
 	
-	public List<Double> getLowerBand(double[] closeData, int periods) {
-		return lowerBollingerBand(closeData, periods);
+	public List<Double> getLowerBand(double[] closingPrices, int periods) {
+		return lowerBollingerBand(closingPrices, periods);
 	}
 	
 	public List<Double> getMACD(
@@ -613,14 +617,14 @@ public class BackEnd {
 		return calculateMACDLine(closingPrices, shortPeriod, longPeriod, signalPeriod, periods);
 	}
 	
-	public List<Double> getEMA(double[] closeData, int periods) {
-		return calculateEMALine(closeData, periods);
-		//return Arrays.stream(calculateEMA(closeData, periods)).boxed().collect(Collectors.toList());
+	public List<Double> getEMA(double[] closingPrices, int periods) {
+		return calculateEMALine(closingPrices, periods);
+		//return Arrays.stream(calculateEMA(closingPrices, periods)).boxed().collect(Collectors.toList());
 	}
 	
-	public List<Double> getRSI(double[] closeData, int periods) {
-		return calculateRSILine(closeData, periods);
-		//return Arrays.stream(calculateRSI(closeData, periods)).boxed().collect(Collectors.toList());
+	public List<Double> getRSI(double[] closingPrices, int periods) {
+		return calculateRSILine(closingPrices, periods);
+		//return Arrays.stream(calculateRSI(closingPrices, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	/*
@@ -731,11 +735,11 @@ public class BackEnd {
 	
 	*/
 	
-	  private double smAverage(double[] priceData2, int periods) {
+	  private double smAverage(double[] closingPrices, int periods) {
 
 	    double movingAverage = 0.0;
 
-	    for (double prices : priceData2) {
+	    for (double prices : closingPrices) {
 	      movingAverage += prices;
 	    }
 
@@ -771,7 +775,9 @@ public class BackEnd {
 	      return 0;
 	  }
 
-	  public void finalDecision(String date, double[] open, double[] high, double[] low, double[] close, int currentIndex){
+	  public void finalDecision(
+			  String date, double[] open, double[] high, double[] low, double[] close, int currentIndex
+			  ){
 	    double[] rsiVals = calculateRSI(close, 14);
 	    rsiVals = Arrays.copyOfRange(rsiVals, currentIndex - 2, currentIndex);
 
@@ -780,10 +786,19 @@ public class BackEnd {
 
 	    int i = currentIndex;
 	    int j = currentIndex - 1;
-	    String engulf = detectEngulf(date, (float) open[i], (float) high[i], (float) low[i], (float) close[i], (float) open[j], (float) high[j], (float) low[j], (float) close[j]);
+	    String engulf = detectEngulf(
+	    		date, (float) open[i],
+	    		(float) high[i], (float) low[i],
+	    		(float) close[i], (float) open[j],
+	    		(float) high[j], (float) low[j],
+	    		(float) close[j]
+	    				);
 	    int engulfSignal = (engulf == null) ? 0 : (engulf.contains("Bull")) ? 1 : -1;
 
-	    int currIndicator = (macdSignal != 0) ? macdSignal : (smaSignal != 0) ? smaSignal : (engulfSignal != 0) ? engulfSignal : 0;
+	    int currIndicator = (macdSignal != 0) ?
+	    		macdSignal : (smaSignal != 0) ?
+	    				smaSignal : (engulfSignal != 0) ?
+	    						engulfSignal : 0;
 
 	    if(currIndicator > 0 && Arrays.stream(rsiVals).min().getAsDouble() < 40){
 	      System.out.println(date + " BUY");
