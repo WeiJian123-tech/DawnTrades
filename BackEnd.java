@@ -722,4 +722,75 @@ public class BackEnd {
 		return (currentPrice < retraceLevelMiddle) && (currentPrice > upperBand);
 	}
 	*/
+	
+	/*
+	TRADING STRATEGY ALGORITHMS
+	
+	Multiple smaller strategies get their own algorithm.
+	They are then called by a higher level algorithm that combines their outputs and makes a decision.
+	
+	*/
+	
+	  private double smAverage(double[] priceData2, int periods) {
+
+	    double movingAverage = 0.0;
+
+	    for (double prices : priceData2) {
+	      movingAverage += prices;
+	    }
+
+	    movingAverage /= periods;
+
+	    return movingAverage;
+  	}
+
+
+	  public int smaStrategy(double[] pData, int currentIndex) {
+	    double sma20 = smAverage(pData, 20);
+	    double sma50 = smAverage(pData, 50);
+	    double sma200 = smAverage(pData, 200);
+	    double currPrice = pData[currentIndex];
+
+	    if(currPrice < sma20 && sma20 < sma50 && sma50 < sma200){
+	      return 1;
+	    } else if(currPrice > sma20 && sma20 > sma50 && sma50 > sma200){
+	      return -1;
+	    }
+	    return 0;
+	  }
+
+	    public int macdStrategy(double[] pData, int currentIndex) {
+	    double[] prevPData = Arrays.copyOfRange(pData, 0, currentIndex - 1);
+	    double prevMACD = calculateMACD(prevPData, 12, 24, 9);
+	    double currMACD = calculateMACD(pData, 12, 24, 9);
+	      if(prevMACD < 0 && currMACD > 0){
+		return 1;
+	      } else if(prevMACD > 0 && currMACD < 0){
+		return -1;
+	      }
+	      return 0;
+	  }
+
+	  public void finalDecision(String date, double[] open, double[] high, double[] low, double[] close, int currentIndex){
+	    double[] rsiVals = calculateRSI(close, 14);
+	    rsiVals = Arrays.copyOfRange(rsiVals, currentIndex - 2, currentIndex);
+
+	    int smaSignal = smaStrategy(close, currentIndex);
+	    int macdSignal = macdStrategy(close, currentIndex);
+
+	    int i = currentIndex;
+	    int j = currentIndex - 1;
+	    String engulf = detectEngulf(date, (float) open[i], (float) high[i], (float) low[i], (float) close[i], (float) open[j], (float) high[j], (float) low[j], (float) close[j]);
+	    int engulfSignal = (engulf == null) ? 0 : (engulf.contains("Bull")) ? 1 : -1;
+
+	    int currIndicator = (macdSignal != 0) ? macdSignal : (smaSignal != 0) ? smaSignal : (engulfSignal != 0) ? engulfSignal : 0;
+
+	    if(currIndicator > 0 && Arrays.stream(rsiVals).min().getAsDouble() < 40){
+	      System.out.println(date + " BUY");
+	    } else if(currIndicator < 0 && Arrays.stream(rsiVals).max().getAsDouble() > 60){
+	      System.out.println(date + " SELL");
+	    } else{
+	      System.out.println(date + " HOLD");
+	    }
+	  }
 }
