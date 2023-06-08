@@ -12,8 +12,13 @@ package Prototype_003;
  * @Authors: Wei Jian Zhen, Jawad Rahman
  */
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+
+import javax.swing.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.knowm.xchart.*;
@@ -77,19 +82,185 @@ public class Main {
 		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
 		chart.addSeries("Candlestick", xTimeList, openDataList, highDataList, lowDataList, closeDataList);
 		chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 5));
-		//chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 10));
-		//chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 15));
+		chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 10));
+		chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 15));
 		
-		//chart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closeData, 5));
-		//chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
-		//chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5));
+		chart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closeData, 5));
+		chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
+		chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5));
 		
 		//Common MACD: 12, 26, 9
 		
-		//chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
-		//chart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closeData, 9));
-		//chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closeData, 5));
-		//chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
+		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
+		chart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closeData, 9));
+		chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closeData, 5));
+		chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
+		
+		
+		//Pop-up window could appear for real-time charts.
+		
+		JFrame cSFrame = new JFrame("Candlestick Detections");
+		
+		cSFrame.setBackground(Color.WHITE);
+		cSFrame.setMinimumSize(new Dimension(500, 500));
+		cSFrame.setPreferredSize(new Dimension(600, 600));
+		
+		JPanel cSPanel = new JPanel();
+		
+		cSPanel.setMinimumSize(new Dimension(500, 500));
+		cSPanel.setPreferredSize(new Dimension(600, 600));
+		cSPanel.setLayout(new BoxLayout(cSPanel, BoxLayout.PAGE_AXIS));
+		
+		String detectMarb = "";
+		String detectMarbFlex = "";
+		String detectDoji = "";
+		String detectDojVar = "";
+		String detectEngulf = "";
+		String detectMornStar = "";
+		String detectEvnnStar = "";
+		
+		for(int i = 0; i < closeData.length; i++) {
+			detectMarb = tradeAlgo.detectMarubozu(
+					xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+					);
+			
+			detectMarbFlex = tradeAlgo.detectMarubozuFlexible(
+					xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+							);
+			
+			detectDoji = tradeAlgo.detectDoji(
+					xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+							);
+			
+			detectDojVar = tradeAlgo.detectDojiVariations(
+					xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+					);
+			
+			JLabel marbLabel = new JLabel(detectMarb, SwingConstants.CENTER);
+			JLabel marbFlexLabel = new JLabel(detectMarbFlex, SwingConstants.CENTER);
+			JLabel dojiLabel = new JLabel(detectDoji, SwingConstants.CENTER);
+			JLabel dojVarLabel = new JLabel(detectDojVar, SwingConstants.CENTER);
+			
+			cSPanel.add(marbLabel);
+			cSPanel.add(marbFlexLabel);
+			cSPanel.add(dojiLabel);
+			cSPanel.add(dojVarLabel);
+		}
+		
+		for(int i = 0; i < closeData.length - 1; i++) {
+			detectEngulf = tradeAlgo.detectEngulf(
+					xTime[i].toString(), openData[i + 1],
+					highData[i + 1], lowData[i + 1],
+					closeData[i + 1], openData[i], highData[i], lowData[i], closeData[i]);
+			
+			JLabel engulfLabel = new JLabel(detectEngulf, SwingConstants.CENTER);
+			
+			cSPanel.add(engulfLabel);
+		}
+		
+		for(int i = 0; i < closeData.length - 2; i++) {
+			detectMornStar = tradeAlgo.detectMorningStar(
+					xTime[i].toString(), openData[i + 2],
+					highData[i + 2], lowData[i + 2],
+					closeData[i + 2], openData[i + 1],
+					highData[i + 1], lowData[i + 1],
+					closeData[i + 1], openData[i],
+					highData[i], lowData[i],
+					closeData[i]
+					);
+			
+			detectEvnnStar = tradeAlgo.detectEveningStar(
+					xTime[i].toString(), openData[i + 2],
+					highData[i + 2], lowData[i + 2],
+					closeData[i + 2], openData[i + 1],
+					highData[i + 1], lowData[i + 1],
+					closeData[i + 1], openData[i],
+					highData[i], lowData[i],
+					closeData[i]
+					);
+			
+			JLabel mornStarLabel = new JLabel(detectMornStar, SwingConstants.CENTER);
+			JLabel evnnStarLabel = new JLabel(detectEvnnStar, SwingConstants.CENTER);
+			
+			cSPanel.add(mornStarLabel);
+			cSPanel.add(evnnStarLabel);
+		}
+		
+		
+		cSFrame.add(cSPanel);
+		cSFrame.pack();
+		cSFrame.setVisible(true);
+		
+		//System.out.println(tradeAlgo.detectMarubozu(xTime, openData, highData, lowData, closeData)); //Returns null
+		
+		/*
+		for(int i = 0; i < closeData.length; i++) {
+			/*
+			System.out.println(
+					tradeAlgo.detectMarubozuFlexible(
+							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+									)
+					);
+					*/
+			
+			/*
+			System.out.println(
+					tradeAlgo.detectDoji(
+							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+									)
+					);
+					*/
+			
+			/*
+			System.out.println(
+					tradeAlgo.detectDojiVariations(
+							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
+									)
+					);
+					*/
+			/*
+		}
+		
+		for(int i = 0; i < closeData.length - 1; i++) {
+			/*
+			System.out.println(
+					tradeAlgo.detectEngulf(
+							xTime[i].toString(), openData[i + 1],
+							highData[i + 1], lowData[i + 1],
+							closeData[i + 1], openData[i], highData[i], lowData[i], closeData[i])
+					);
+					*/ /*
+		}
+		
+		for(int i = 0; i < closeData.length - 2; i++) {
+			/*
+			System.out.println(
+					tradeAlgo.detectMorningStar(
+							xTime[i].toString(), openData[i + 2],
+							highData[i + 2], lowData[i + 2],
+							closeData[i + 2], openData[i + 1],
+							highData[i + 1], lowData[i + 1],
+							closeData[i + 1], openData[i],
+							highData[i], lowData[i],
+							closeData[i]
+							)
+					);
+					*/
+			
+			/*
+			System.out.println(
+					tradeAlgo.detectEveningStar(
+							xTime[i].toString(), openData[i + 2],
+							highData[i + 2], lowData[i + 2],
+							closeData[i + 2], openData[i + 1],
+							highData[i + 1], lowData[i + 1],
+							closeData[i + 1], openData[i],
+							highData[i], lowData[i],
+							closeData[i]
+							)
+					);
+					*/ /*
+		} */
 		
 		return chart;
 	}

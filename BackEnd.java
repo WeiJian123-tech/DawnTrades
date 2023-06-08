@@ -1,7 +1,7 @@
 package Prototype_003;
 
 /*
- * Program given by ChatGPT.
+ * Part of program given by ChatGPT.
  */
 
 import java.util.*;
@@ -45,12 +45,12 @@ public class BackEnd {
   
   	*/
   	//Uses Ideal definition of Marubozu Candles
-  	public String detectMarubozu(String date, float open, float high, float low, float close) {
-  		float bodyLength = Math.abs(close - open);
-  		//float totalLength = high - low;  //Potential future use
-  		float upperShadow = Math.abs(high - Math.max(open, close));
-  		float lowerShadow = Math.abs(Math.min(open, close) - low);
-  		//float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  	public String detectMarubozu(String date, double open, double high, double low, double close) {
+  		double bodyLength = Math.abs(close - open);
+  		//double totalLength = high - low;  //Potential future use
+  		double upperShadow = Math.abs(high - Math.max(open, close));
+  		double lowerShadow = Math.abs(Math.min(open, close) - low);
+  		//double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
 
   		if (low == open && high == close) {
   			return date + "Bull Marubozu Full Detected";
@@ -73,12 +73,12 @@ public class BackEnd {
   	}
 
   	//Detects Candles that are very close to being Marubozu even if they aren't by strict definition
-  	public String detectMarubozuFlexible(String date, float open, float high, float low, float close) {
-  		float bodyLength = Math.abs(close - open);
-  		//float totalLength = high - low;  //Potential future use
-  		float upperShadow = Math.abs(high - Math.max(open, close));
-  		float lowerShadow = Math.abs(Math.min(open, close) - low);
-  		//float variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  	public String detectMarubozuFlexible(String date, double open, double high, double low, double close) {
+  		double bodyLength = Math.abs(close - open);
+  		//double totalLength = high - low;  //Potential future use
+  		double upperShadow = Math.abs(high - Math.max(open, close));
+  		double lowerShadow = Math.abs(Math.min(open, close) - low);
+  		//double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
 
   		if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
   			return date + " Bull Marubozu Detected";
@@ -89,7 +89,7 @@ public class BackEnd {
   		return null;
   	}
 
-  	public String detectDoji(String date, float open, float high, float low, float close){
+  	public String detectDoji(String date, double open, double high, double low, double close){
   		if(
 			(Math.abs(close - open) / (high - low) < 0.1) &&
 			((high - Math.max(close, open)) > (3 * Math.abs(close - open))) &&
@@ -102,11 +102,11 @@ public class BackEnd {
   	}
 
 	//5 Main Types of Doji Candlesticks are detected instead of just regular Dojis
-	  public String detectDojiVariations(String date, float open, float high, float low, float close) {
-	    float bodyLength = Math.abs(close - open);
-	    float totalLength = high - low;
-	    float upperShadow = Math.abs(high - Math.max(open, close));
-	    float lowerShadow = Math.abs(Math.min(open, close) - low);
+	  public String detectDojiVariations(String date, double open, double high, double low, double close) {
+	    double bodyLength = Math.abs(close - open);
+	    double totalLength = high - low;
+	    double upperShadow = Math.abs(high - Math.max(open, close));
+	    double lowerShadow = Math.abs(Math.min(open, close) - low);
 
 	    if (bodyLength <= totalLength * 0.1 && upperShadow >= totalLength * 0.4 && lowerShadow >= totalLength * 0.4) {
 	      return date + " Long-Legged Doji Detected";
@@ -126,8 +126,8 @@ public class BackEnd {
 	  }
 
   	public String detectEngulf(
-		String date, float open, float high, float low, float close,
-		float prevOpen, float prevHigh, float prevLow, float prevClose
+		String date, double open, double high, double low, double close,
+		double prevOpen, double prevHigh, double prevLow, double prevClose
 		) {
 		if(
 				open >= prevClose &&
@@ -150,9 +150,9 @@ public class BackEnd {
   	}
 	
 	public String detectMorningStar(
-			String date, float open, float high, float low, float close, float prevOpen,
-			float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
-			float prevClose2
+			String date, double open, double high, double low, double close, double prevOpen,
+			double prevHigh, double prevLow, double prevClose, double prevOpen2, double prevHigh2, double prevLow2,
+			double prevClose2
 			) {
 		
 		if (Math.max(prevOpen, prevClose) < prevClose2 && prevClose2 < prevOpen2 && close > open &&
@@ -164,9 +164,9 @@ public class BackEnd {
 	}
 
 	public String detectEveningStar(
-			String date, float open, float high, float low, float close, float prevOpen,
-			float prevHigh, float prevLow, float prevClose, float prevOpen2, float prevHigh2, float prevLow2,
-			float prevClose2
+			String date, double open, double high, double low, double close, double prevOpen,
+			double prevHigh, double prevLow, double prevClose, double prevOpen2, double prevHigh2, double prevLow2,
+			double prevClose2
 	      ) {
 		
 		if (Math.min(prevOpen, prevClose) > prevClose2 && prevClose2 > prevOpen2 && close < open &&
