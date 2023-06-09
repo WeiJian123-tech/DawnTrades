@@ -9,177 +9,27 @@ import java.util.stream.Collectors;
 
 public class BackEnd {
 
+	private CandleStickDetectionAlgo cda;
 	private double[] priceData;
 	private int periods;
-	private double[] fibonacciRetracementLevels = new double[7];
 	
-	public BackEnd(
-			double[] priceData, int periods,
-			double[] movingAverages, double[] standardDeviations,
-			double[] fibonacciRetracementLevels
-			) {
+	public BackEnd(CandleStickDetectionAlgo cda, double[] priceData, int periods) {
+		this.cda = cda;
 		this.priceData = priceData;
 		this.periods = periods;
-		this.fibonacciRetracementLevels = fibonacciRetracementLevels;
 	}
 	
 	public BackEnd(double[] priceData, int periods) {
-		this(priceData, periods, new double[999], new double[999], new double[7]);
+		this.priceData = priceData;
+		this.periods = periods;
 	}
 	
 	public BackEnd(double[] priceData) {
-		this(priceData, priceData.length, new double[999], new double[999], new double[7]);
+		this(priceData, priceData.length);
 	}
 	
 	public BackEnd() {
-		this(new double[999], 999, new double[999], new double[999], new double[7]);
-	}
-	
-	/*
-	CANDLESTICK PATTERN DETECTION ALGORITHMS
-
-	Things to do:
-	  - Get better calculations/detection results
-	  - Make functions work with data in Backend Class instance fields
-	  - Improve return types
-	  - Possible change date format
-  
-  	*/
-  	//Uses Ideal definition of Marubozu Candles
-  	public String detectMarubozu(String date, double open, double high, double low, double close) {
-  		double bodyLength = Math.abs(close - open);
-  		//double totalLength = high - low;  //Potential future use
-  		double upperShadow = Math.abs(high - Math.max(open, close));
-  		double lowerShadow = Math.abs(Math.min(open, close) - low);
-  		//double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
-
-  		if (low == open && high == close) {
-  			return date + "Bull Marubozu Full Detected";
-  		} else if (high == open && low == close) {
-  			return date + " Bear Marubozu Full Detected";
-  		} else if (low == open || high == close) {
-  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-  				return date + " Bull Marubozu Open Detected";
-  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-  				return date + " Bull Marubozu Close Detected";
-  			}
-  		} else if (high == open || low == close) {
-  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-  				return date + " Bear Marubozu Close Detected";
-  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-  				return date + " Bear Marubozu Open Detected";
-  			}
-  		}
-  		return null;
-  	}
-
-  	//Detects Candles that are very close to being Marubozu even if they aren't by strict definition
-  	public String detectMarubozuFlexible(String date, double open, double high, double low, double close) {
-  		double bodyLength = Math.abs(close - open);
-  		//double totalLength = high - low;  //Potential future use
-  		double upperShadow = Math.abs(high - Math.max(open, close));
-  		double lowerShadow = Math.abs(Math.min(open, close) - low);
-  		//double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
-
-  		if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
-  			return date + " Bull Marubozu Detected";
-  		} else if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
-  			return date + " Bear Marubozu Detected";
-  		}
-  		
-  		return null;
-  	}
-
-  	public String detectDoji(String date, double open, double high, double low, double close){
-  		if(
-			(Math.abs(close - open) / (high - low) < 0.1) &&
-			((high - Math.max(close, open)) > (3 * Math.abs(close - open))) &&
-			((Math.min(close, open) - low) > (3 * Math.abs(close - open)))
-			) {
-  			return date + " Doji Detected";
-  		}
-  		
-  		return null;
-  	}
-
-	//5 Main Types of Doji Candlesticks are detected instead of just regular Dojis
-	  public String detectDojiVariations(String date, double open, double high, double low, double close) {
-	    double bodyLength = Math.abs(close - open);
-	    double totalLength = high - low;
-	    double upperShadow = Math.abs(high - Math.max(open, close));
-	    double lowerShadow = Math.abs(Math.min(open, close) - low);
-
-	    if (
-	    		bodyLength <= totalLength * 0.1 &&
-	    		upperShadow >= totalLength * 0.4 &&
-	    		lowerShadow >= totalLength * 0.4
-	    		) {
-	      return date + " Long-Legged Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (lowerShadow > (3 * bodyLength)) &&
-	      (upperShadow < bodyLength)) {
-	      return date + " Dragon Fly Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * bodyLength)) &&
-	      (lowerShadow <= bodyLength)) {
-	      return date + " Gravestone Doji Detected";
-	    } else if (bodyLength <= totalLength * 0.1 && upperShadow == 0 && lowerShadow == 0) {
-	      return date + " Four-Price Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * Math.abs(close - open))) &&
-	      (lowerShadow > (3 * bodyLength))) {
-	      return date + " Regular Doji Detetced";
-	    }
-	    return null;
-	  }
-
-  	public String detectEngulf(
-		String date, double open, double high, double low, double close,
-		double prevOpen, double prevHigh, double prevLow, double prevClose
-		) {
-		if(
-				open >= prevClose &&
-				prevClose > prevOpen &&
-				open > close &&
-				prevOpen >= close &&
-				(open - close) > (prevClose - prevOpen)
-				){
-  			return date + " Bearish Engulfment Detected";
-		} else if(
-				close >= prevOpen &&
-				prevOpen > prevClose &&
-				close > open &&
-				prevClose >= open &&
-				(close - open) > (prevOpen - prevClose)
-				){
-  			return date + " Bullish Engulfment Detected";
-		}
-		return null;
-  	}
-	
-	public String detectMorningStar(
-			String date, double open, double high, double low, double close, double prevOpen,
-			double prevHigh, double prevLow, double prevClose, double prevOpen2, double prevHigh2, double prevLow2,
-			double prevClose2
-			) {
-		
-		if (Math.max(prevOpen, prevClose) < prevClose2 && prevClose2 < prevOpen2 && close > open &&
-				open > Math.max(prevOpen, prevClose)) {
-			return date + " Morning Star Detected";
-		}
-		
-		return null;
-	}
-
-	public String detectEveningStar(
-			String date, double open, double high, double low, double close, double prevOpen,
-			double prevHigh, double prevLow, double prevClose, double prevOpen2, double prevHigh2, double prevLow2,
-			double prevClose2
-	      ) {
-		
-		if (Math.min(prevOpen, prevClose) > prevClose2 && prevClose2 > prevOpen2 && close < open &&
-				open < Math.min(prevOpen, prevClose)) {
-			return date + " Evening Star Detected";
-		}
-		
-		return null;
+		this(new double[999], 999);
 	}
 	
 	// RSI CALCULATION ALGORITHM
@@ -688,34 +538,6 @@ public class BackEnd {
 	}
 	*/
 	
-	/*
-	public double getMovingAverage(List<Double> priceData, int periods) {
-		return movingAverage(priceData, periods);
-	}
-	*/
-	
-	/*
-	public double getStandardDeviation(List<Double> priceData, int periods) {
-		return standardDeviation(priceData, periods);
-	}
-	*/
-	
-	/*
-	public double getUpperBand(List<Double> priceData, int periods) {
-		return upperBollingerBand(priceData, periods);
-	}
-	
-	public double getLowerBand(List<Double> priceData, int periods) {
-		return lowerBollingerBand(priceData, periods);
-	}
-	*/
-	
-	/*
-	public double getFibonnaciLevel(double highPrice, double lowPrice, int level) {
-		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
-	}
-	*/
-	
 	private double setHigh(double close, double originalPrice) {
 		return close + (originalPrice * 0.02);
 	}
@@ -865,7 +687,7 @@ public class BackEnd {
 
 	    int i = currentIndex;
 	    int j = currentIndex - 1;
-	    String engulf = detectEngulf(
+	    String engulf = cda.detectEngulf(
 	    		date, (float) open[i],
 	    		(float) high[i], (float) low[i],
 	    		(float) close[i], (float) open[j],
