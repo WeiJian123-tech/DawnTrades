@@ -17,13 +17,14 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
+import org.knowm.xchart.style.markers.None;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 public class Main {
 
@@ -71,7 +72,7 @@ public class Main {
 		double[] lowData = new double[yPrices.length-1];
 		double[] closeData = new double[yPrices.length-1];
 		
-		populateData(yPrices, xTime, openData, highData, lowData, closeData);
+		populateData(tradeAlgo, yPrices, xTime, openData, highData, lowData, closeData);
 		
 		List<Date> xTimeList = Arrays.stream(xTime).collect(Collectors.toList());
 		List<Double> openDataList = Arrays.stream(openData).boxed().collect(Collectors.toList());
@@ -82,23 +83,30 @@ public class Main {
 		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
 		chart.addSeries("Candlestick", xTimeList, openDataList, highDataList, lowDataList, closeDataList);
 		chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 5));
-		chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 10));
-		chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 15));
+		//chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 10));
+		//chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closeData, 15));
 		
+		/*
 		chart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closeData, 5));
-		chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5));
-		chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5));
+		chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closeData, 5)).setMarker(
+				SeriesMarkers.NONE
+				);
+		chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closeData, 5)).setMarker(
+				SeriesMarkers.NONE
+				);
+		*/
 		
 		//Common MACD: 12, 26, 9
 		
-		chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
-		chart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closeData, 9));
-		chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closeData, 5));
-		chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
+		//chart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closeData, 12, 26, 9, 5));
+		//chart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closeData, 9));
+		//chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closeData, 5));
+		//chart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closeData, 5));
 		
 		
 		//Pop-up window could appear for real-time charts.
 		
+		/*
 		JFrame cSFrame = new JFrame("Candlestick Detections");
 		
 		cSFrame.setBackground(Color.WHITE);
@@ -190,84 +198,15 @@ public class Main {
 		cSFrame.add(cSPanel);
 		cSFrame.pack();
 		cSFrame.setVisible(true);
-		
-		//System.out.println(tradeAlgo.detectMarubozu(xTime, openData, highData, lowData, closeData)); //Returns null
-		
-		/*
-		for(int i = 0; i < closeData.length; i++) {
-			/*
-			System.out.println(
-					tradeAlgo.detectMarubozuFlexible(
-							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
-									)
-					);
-					*/
-			
-			/*
-			System.out.println(
-					tradeAlgo.detectDoji(
-							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
-									)
-					);
-					*/
-			
-			/*
-			System.out.println(
-					tradeAlgo.detectDojiVariations(
-							xTime[i].toString(), openData[i], highData[i], lowData[i], closeData[i]
-									)
-					);
-					*/
-			/*
-		}
-		
-		for(int i = 0; i < closeData.length - 1; i++) {
-			/*
-			System.out.println(
-					tradeAlgo.detectEngulf(
-							xTime[i].toString(), openData[i + 1],
-							highData[i + 1], lowData[i + 1],
-							closeData[i + 1], openData[i], highData[i], lowData[i], closeData[i])
-					);
-					*/ /*
-		}
-		
-		for(int i = 0; i < closeData.length - 2; i++) {
-			/*
-			System.out.println(
-					tradeAlgo.detectMorningStar(
-							xTime[i].toString(), openData[i + 2],
-							highData[i + 2], lowData[i + 2],
-							closeData[i + 2], openData[i + 1],
-							highData[i + 1], lowData[i + 1],
-							closeData[i + 1], openData[i],
-							highData[i], lowData[i],
-							closeData[i]
-							)
-					);
-					*/
-			
-			/*
-			System.out.println(
-					tradeAlgo.detectEveningStar(
-							xTime[i].toString(), openData[i + 2],
-							highData[i + 2], lowData[i + 2],
-							closeData[i + 2], openData[i + 1],
-							highData[i + 1], lowData[i + 1],
-							closeData[i + 1], openData[i],
-							highData[i], lowData[i],
-							closeData[i]
-							)
-					);
-					*/ /*
-		} */
+		*/
 		
 		return chart;
 	}
 	
 	public static void populateData(
-			double[] yPrices, Date[] xTime, double[] openData,
-			double[] highData, double[] lowData, double[] closeData
+			BackEnd tradeAlgo, double[] yPrices, Date[] xTime,
+			double[] openData, double[] highData, double[] lowData,
+			double[] closeData
 			) {
 		
 		Calendar cal = Calendar.getInstance();
@@ -284,89 +223,17 @@ public class Main {
 			
 			double previous = yPrices[i];
 			
-			data = getNewClose(yPrices[i+1]);
+			data = tradeAlgo.getNewClose(yPrices[i+1]);
 			
 			openData[i] = previous;
 			
-			highData[i] = getHigh(Math.max(previous, data), yPrices[i+1]);
+			highData[i] = tradeAlgo.getHigh(Math.max(previous, data), yPrices[i+1]);
 			
-			lowData[i] = getLow(Math.min(previous, data), yPrices[i+1]);
+			lowData[i] = tradeAlgo.getLow(Math.min(previous, data), yPrices[i+1]);
 			
 			closeData[i] = data;
 		}
 		
 	}
-	
-	//Math.random() * 0.02 creates random variations of the chart each run.
-	private static double getHigh(double close, double originalPrice) {
-		return close + (originalPrice * 0.02);
-	}
-	
-	private static double getLow(double close, double originalPrice) {
-		return close - (originalPrice * 0.02);
-	}
-	
-	private static double getNewClose(double nextPrice) {
-		return nextPrice;
-	}
-	
-	/*
-	private static void lineGraph(List<Double> yPrices, List<Date> xTime) {
-		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		//sdf.setTimeZone(TimeZone.getDefault());
-		
-		/*
-		Date d = new Date();
-		
-		long second = 1000;
-		
-		long minute = 60000;
-		
-		long halfHour = 3600000 / 2;
-		
-		long hour = 3600000;
-		
-		System.out.println(sdf.format(d) + " " + sdf.format(d.getTime() - hour));
-		*/ /*
-		
-		//Get current date and time.
-		Calendar cal = Calendar.getInstance();
-		
-		//Set today's time to 9:00 A.M. GMT
-		cal.set(Calendar.HOUR_OF_DAY, 9);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		
-		//Start from 9:00 A.M. Increment every 30 minutes for each price index. Add each 30 minute interval to xTime.
-		for(int i = 0; i < yPrices.size(); i++) {
-			cal.add(Calendar.MINUTE, 30);
-			xTime.add(cal.getTime());
-		}
-		
-		//Create the line chart
-		XYChart chart = new XYChartBuilder().
-				width(800).height(600).title("Project GoldenTrades").
-				xAxisTitle("Time").yAxisTitle("Stock Price").build();
-		
-		//Customize line chart
-		chart.getStyler().setChartTitleVisible(true);
-		chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
-		
-		//Format Y-axis to include a "$" sign and set Double value to two decimal places
-		Function<Double, String> yTickFormatter = prices -> "$" + String.format("%.2f", prices);
-		
-		chart.getStyler().setyAxisTickLabelsFormattingFunction(yTickFormatter);
-		
-		//Create Title, X-Axis, and Y-Axis
-		chart.addSeries("Test", xTime, yPrices);
-		
-		//Enables tooltips to hover over with mouse to view plotted information.
-		chart.getStyler().setToolTipsEnabled(true);
-		
-		//Show the line chart
-		new SwingWrapper<XYChart>(chart).displayChart();
-	}
-	*/
 	
 }

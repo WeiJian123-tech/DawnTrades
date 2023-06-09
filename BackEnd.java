@@ -5,6 +5,7 @@ package Prototype_003;
  */
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackEnd {
 
@@ -275,6 +276,8 @@ public class BackEnd {
 	//Front End EMA method  Link: https://is.gd/m2Q5WI
 	public List<Double> calculateEMALine(double[] closingPrices, int periods) {
 		
+		//long startTime = System.nanoTime();
+		
 		List<Double> ema = new ArrayList<>();
 		
 		for(int i = 0; i < periods; i++) {
@@ -288,6 +291,12 @@ public class BackEnd {
 			
 			ema.add( (closingPrices[j] * multiplier) + (ema.get(j - 1) * (1 - multiplier)));
 		}
+		
+		//long endTime = System.nanoTime();
+		
+		//long totalTime = endTime - startTime;
+		
+		//System.out.println(totalTime);
 		
 		return ema;
   	}
@@ -381,6 +390,8 @@ public class BackEnd {
 	//Gets closing price data
 	private List<Double> simpleMovingAverage(double[] closingPrices, int periods) {
 		
+		//long startTime = System.nanoTime();
+		
 		List<Double> movAvgs = new ArrayList<>();
 		
 		for(int i = 0; i < closingPrices.length; i++) {
@@ -401,6 +412,10 @@ public class BackEnd {
 			
 			movAvgs.add(sum / periods);
 		}
+		
+		//long endTime = System.nanoTime();
+		//long totalTime = endTime - startTime;
+		//System.out.println(totalTime);
 		
 		return movAvgs;
 	}
@@ -590,6 +605,46 @@ public class BackEnd {
 	*/
 	
 	/*
+	public List<Double> testList(double[] arr) {
+		long startTime = System.nanoTime();
+		
+		List<Double> newList = new ArrayList<>();
+		
+		for(int i = 0; i < arr.length; i++) {
+			
+			if(arr[i] % 5 == 0) {
+				newList.add(arr[i]);
+			}
+			
+			for(int j = 0; j < arr.length; j++) {
+				if(arr[i] % 5 != 0) {
+					newList.add(arr[i]);
+				}
+			}
+		}
+		
+		long endTime = System.nanoTime();
+		long totalTime1 = endTime - startTime;
+		System.out.println(totalTime1);
+		
+		startTime = System.nanoTime();
+		
+		List<Double> parsedList = Arrays.stream(arr).boxed().collect(Collectors.toList());
+		
+		endTime = System.nanoTime();
+		long totalTime2 = endTime - startTime;
+		
+		System.out.println(totalTime2);
+		System.out.println(
+				"Which is faster? " +
+		(totalTime1 < totalTime2? "for loop: " + totalTime1 : "Arrays.stream(): " + totalTime2)
+				);
+		
+		return null;
+	}
+	*/
+	
+	/*
 	 * Public methods for user access:
 	 * 
 	 * Should return List<Double> for .addSeries() in `Main.java`
@@ -660,6 +715,30 @@ public class BackEnd {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
 	*/
+	
+	private double setHigh(double close, double originalPrice) {
+		return close + (originalPrice * 0.02);
+	}
+	
+	private double setLow(double close, double originalPrice) {
+		return close - (originalPrice * 0.02);
+	}
+	
+	private double setNewClose(double nextPrice) {
+		return nextPrice;
+	}
+	
+	public double getHigh(double close, double originalPrice) {
+		return setHigh(close, originalPrice);
+	}
+	
+	public double getLow(double close, double originalPrice) {
+		return setLow(close, originalPrice);
+	}
+	
+	public double getNewClose(double nextPrice) {
+		return setNewClose(nextPrice);
+	}
 	
 	public double[] getPriceData() {
 		return priceData;
