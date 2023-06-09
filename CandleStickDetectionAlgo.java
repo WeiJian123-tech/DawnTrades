@@ -32,30 +32,24 @@ public class CandleStickDetectionAlgo {
   	*/
   	//Uses Ideal definition of Marubozu Candles
   	public String detectMarubozu(String date, double open, double high, double low, double close) {
-  		double bodyLength = Math.abs(close - open);
-  		//double totalLength = high - low;  //Potential future use
-  		double upperShadow = Math.abs(high - Math.max(open, close));
-  		double lowerShadow = Math.abs(Math.min(open, close) - low);
-  		//double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  	    double bodyLength = Math.abs(close - open);
+  	    double totalLength = Math.abs(high - low); //Potential future use
+  	    double upperShadow = Math.abs(high - Math.max(open, close));
+  	    double lowerShadow = Math.abs(Math.min(open, close) - low);
+  	    //double variance = 3 * (Math.abs(open - close) + 15 / 2) / 2;  //Potential future use
+  	    String s = null;
 
-  		if (low == open && high == close) {
-  			return date + "Bull Marubozu Full Detected";
-  		} else if (high == open && low == close) {
-  			return date + " Bear Marubozu Full Detected";
-  		} else if (low == open || high == close) {
-  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-  				return date + " Bull Marubozu Open Detected";
-  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-  				return date + " Bull Marubozu Close Detected";
-  			}
-  		} else if (high == open || low == close) {
-  			if (upperShadow <= 0.1 * bodyLength && lowerShadow == 0) {
-  				return date + " Bear Marubozu Close Detected";
-  			} else if (lowerShadow <= 0.1 * bodyLength && upperShadow == 0) {
-  				return date + " Bear Marubozu Open Detected";
-  			}
-  		}
-  		return null;
+  	    boolean isBull = (low == open || high == close);
+  	    boolean isFull = (bodyLength == totalLength);
+  	    boolean topWick = (upperShadow <= 0.1 * bodyLength && lowerShadow == 0);
+  	    boolean bottomWick = (lowerShadow <= 0.1 * bodyLength && upperShadow == 0);
+
+  	    if (isBull) {
+  	        s = isFull ? date + " Bull Marubozu Full Detected" : topWick ? date + " Bull Marubozu Open Detected" : bottomWick ? date + " Bull Marubozu Close Detected" : null;
+  	    } else {
+  	        s = isFull ? date + " Bear Marubozu Full Detected" : topWick ? date + " Bear Marubozu Close Detected" : bottomWick ? date + " Bear Marubozu Open Detected" : null;
+  	    }
+  	    return s;
   	}
 
   	//Detects Candles that are very close to being Marubozu even if they aren't by strict definition
