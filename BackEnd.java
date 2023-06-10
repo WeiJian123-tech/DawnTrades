@@ -5,7 +5,6 @@ package Prototype_003;
  */
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BackEnd {
 
@@ -238,12 +237,29 @@ public class BackEnd {
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
 	//Gets closing price data
+  	//Code provided by ChatGPT
 	private List<Double> simpleMovingAverage(double[] closingPrices, int periods) {
 		
 		//long startTime = System.nanoTime();
 		
 		List<Double> movAvgs = new ArrayList<>();
 		
+		for(int i = 0; i < periods; i++) {
+			movAvgs.add(null);
+		}
+		
+		double sum = 0.0;
+		
+		for(int i = 0; i < periods; i++) {
+			sum += closingPrices[i];
+		}
+		
+		for(int i = periods; i < closingPrices.length; i++) {
+			sum += closingPrices[i] - closingPrices[i - periods];
+			movAvgs.add(sum / periods);
+		}
+		
+		/*
 		for(int i = 0; i < closingPrices.length; i++) {
 			
 			//Adds null elements until period.
@@ -262,28 +278,14 @@ public class BackEnd {
 			
 			movAvgs.add(sum / periods);
 		}
+		*/
 		
 		//long endTime = System.nanoTime();
 		//long totalTime = endTime - startTime;
-		//System.out.println(totalTime);
+		//System.out.println("duration: " + totalTime);
 		
 		return movAvgs;
 	}
-	  
-	/*
-	private double movingAverage(List<Double> priceData2, int periods) {
-		
-		double movingAverage = 0.0;
-		
-		for(Double prices: priceData2) {
-			movingAverage += prices;
-		}
-		
-		movingAverage /= periods;
-		
-		return movingAverage;
-	}
-	*/
 	
 	//Calculate a standard deviation of a stock.
 	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
@@ -293,6 +295,40 @@ public class BackEnd {
 		List<Double> stdDevs = new ArrayList<>();
 		List<Double> movAvgs = simpleMovingAverage(closingPrices, periods);
 		
+		for(int i = 0; i < periods; i++) {
+			stdDevs.add(null);
+		}
+		
+		double sum = 0.0, sumOfSquares = 0.0, variance = 0.0, standardDeviation = 0.0;
+		
+		//Sliding Door Approach
+		for(int i = 0; i < periods; i++) {
+			sum += closingPrices[i];
+		}
+		
+		double average = sum / periods;
+		
+		for(int i = 0; i < periods; i++) {
+			sumOfSquares += Math.pow((closingPrices[i] - average), 2);
+		}
+		
+		for(int i = periods; i < closingPrices.length; i++) {
+			double prevCloPrice = closingPrices[i - periods];
+			double currCloPrice = closingPrices[i];
+			
+			sum += currCloPrice - prevCloPrice;
+			
+			average = sum / periods;
+			
+			sumOfSquares -= Math.pow((prevCloPrice - average), 2);
+			sumOfSquares += Math.pow((currCloPrice - average), 2);
+			
+			standardDeviation = Math.sqrt(Math.abs(sumOfSquares) / periods);
+			stdDevs.add(standardDeviation);
+		}
+		
+		
+		/*
 		for(int i = 0; i < closingPrices.length; i++) {
 			
 			if(i < periods) {
@@ -315,6 +351,7 @@ public class BackEnd {
 			
 			stdDevs.add(standardDeviation);
 		}
+		*/
 		
 		return stdDevs;
 	}
@@ -357,6 +394,21 @@ public class BackEnd {
 		
 		return lowBollBand;
 	}
+	
+	/*
+	private double movingAverage(List<Double> priceData2, int periods) {
+		
+		double movingAverage = 0.0;
+		
+		for(Double prices: priceData2) {
+			movingAverage += prices;
+		}
+		
+		movingAverage /= periods;
+		
+		return movingAverage;
+	}
+	*/
 	
 	/*
 	private double standardDeviation(List<Double> closingPrices, int periods) {
