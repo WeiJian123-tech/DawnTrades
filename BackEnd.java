@@ -5,6 +5,7 @@ package Prototype_003;
  */
 
 import java.util.*;
+import java.math.*;
 
 public class BackEnd {
 
@@ -293,7 +294,7 @@ public class BackEnd {
 	private List<Double> standardDeviation(double[] closingPrices, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
-		List<Double> movAvgs = simpleMovingAverage(closingPrices, periods);
+		//List<Double> movAvgs = simpleMovingAverage(closingPrices, periods);
 		
 		for(int i = 0; i < periods; i++) {
 			stdDevs.add(null);

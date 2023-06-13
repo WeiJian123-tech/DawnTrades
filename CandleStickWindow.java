@@ -2,6 +2,8 @@ package Prototype_003;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelListener;
 import java.util.*;
 
 public class CandleStickWindow extends JFrame {
@@ -68,6 +70,8 @@ public class CandleStickWindow extends JFrame {
 		setBackground(Color.WHITE);
 		setMinimumSize(new Dimension(500, 500));
 		setPreferredSize(new Dimension(600, 600));
+		
+		//https://stackoverflow.com/a/10346673/11628809
 		
 		JPanel cSPanel = new JPanel();
 		
@@ -150,11 +154,11 @@ public class CandleStickWindow extends JFrame {
 			cSPanel.add(evnnStarLabel);
 		}
 		
-		
 		add(cSPanel);
 		
 		pack();
 		setVisible(true);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 	}
 }
