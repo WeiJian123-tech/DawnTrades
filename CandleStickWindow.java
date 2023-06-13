@@ -73,11 +73,11 @@ public class CandleStickWindow extends JFrame {
 		
 		//https://stackoverflow.com/a/10346673/11628809
 		
-		JPanel cSPanel = new JPanel();
+		JPanel csPanel = new JPanel();
 		
-		cSPanel.setMinimumSize(new Dimension(500, 500));
-		cSPanel.setPreferredSize(new Dimension(600, 600));
-		cSPanel.setLayout(new BoxLayout(cSPanel, BoxLayout.PAGE_AXIS));
+		csPanel.setMinimumSize(new Dimension(500, 500));
+		csPanel.setPreferredSize(new Dimension(600, 600));
+		csPanel.setLayout(new BoxLayout(csPanel, BoxLayout.PAGE_AXIS));
 		
 		String detectMarb = "";
 		String detectMarbFlex = "";
@@ -109,10 +109,10 @@ public class CandleStickWindow extends JFrame {
 			JLabel dojiLabel = new JLabel(detectDoji);
 			JLabel dojVarLabel = new JLabel(detectDojVar);
 			
-			cSPanel.add(marbLabel);
-			cSPanel.add(marbFlexLabel);
-			cSPanel.add(dojiLabel);
-			cSPanel.add(dojVarLabel);
+			csPanel.add(marbLabel);
+			csPanel.add(marbFlexLabel);
+			csPanel.add(dojiLabel);
+			csPanel.add(dojVarLabel);
 		}
 		
 		for(int i = 0; i < closeData.length - 1; i++) {
@@ -123,7 +123,7 @@ public class CandleStickWindow extends JFrame {
 			
 			JLabel engulfLabel = new JLabel(detectEngulf);
 			
-			cSPanel.add(engulfLabel);
+			csPanel.add(engulfLabel);
 		}
 		
 		for(int i = 0; i < closeData.length - 2; i++) {
@@ -150,11 +150,18 @@ public class CandleStickWindow extends JFrame {
 			JLabel mornStarLabel = new JLabel(detectMornStar);
 			JLabel evnnStarLabel = new JLabel(detectEvnnStar);
 			
-			cSPanel.add(mornStarLabel);
-			cSPanel.add(evnnStarLabel);
+			csPanel.add(mornStarLabel);
+			csPanel.add(evnnStarLabel);
 		}
 		
-		add(cSPanel);
+		JScrollPane scrollPane = new JScrollPane(csPanel);
+		
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(new Dimension(500, 500));
+		scrollPane.setPreferredSize(new Dimension(600, 600));
+		
+		add(scrollPane);
 		
 		pack();
 		setVisible(true);
