@@ -12,7 +12,7 @@ Currently however, the development of this working prototype does not have all t
 
 * Using Technical Analysis for the program's algorithm. Combining it with Fundamental Analysis could be in our next working prototype.
 
-* Inserting stock data via arrays, lists, user input, or .txt file.
+* Inserting stock data via arrays, lists, user input, .txt file, or .csv file.
 
 For long time goals:
 
