@@ -1,29 +1,28 @@
 # Project-GoldenTrades
 
-Project GoldenTrades is a Java program that is intended to trade stocks automatically. 
+Project GoldenTrades is a stock charting Java program that is intended to assist with trading publicly available common stock.
 
 Java and the Java Library xChart is utilized for the creation of this program due to the relative ease and convienence of making fast programs with graphs/charts.
 
-Currently however, the development of this working prototype does not have all the features for a automatic trading algorithm. What this working prototype is supposed to have is:
+Currently, the development of this working prototype does not have all the features that are going to be present in the final non-prototype build. All features, User Interfaces (U.I.), and methodologies are subject to change during development and improvements of this and future working prototypes. What this working prototype is supposed to have is:
 
-* Graphs that shows stock price: first and foremost static graphs to test the programs prediction capabilities and model the stock market during the weekends. Afterwards real-time non-static graphs that display the stock price as it fluctuates during trading hours.
+* A simple static graph that shows the stock price of a single stock ticker that has slight prediction capabilities.
 
-* Stock price predictions that are calculated by our program's algorithm and displayed using some kind of indicator for where the stock price is going to be at. 
+* Stock price prediction(s) that are calculated by our program's algorithm and displayed using some kind of indicator for where the stock price is going to be at. 
 
 * Using Technical Analysis for the program's algorithm. Combining it with Fundamental Analysis could be in our next working prototype.
 
-* Inserting stock data via arrays, lists, user input, .txt file, or .csv file.
+* Inserting stock data via .csv file.
 
 For long time goals:
 
-* Get real time stock data from the internet
-  - If not, be able to input data manually.
+* Get stock data from `.csv` files.
 
 * Be able to predict time to buy and sell for 1 day, 5 days, 1 week, 1 month, 3 months, 6 months, 1 year, 2 years, 5 years, 10 years, and lifetime of stock.
 
 * Clean, simple, easy to understand User Interface (U.I.)
 
-* Fast - many other stock trading programs trade in milliseconds to nanoseconds.
+* Fast - Trades today happen between milliseconds to nanoseconds. Should speed be balanced by accuracy or should speed be prioritized over accuracy?
 
 Extra features that could be added:
 
@@ -38,4 +37,4 @@ Programmed and developed by Wei Jian Zhen and Jawad Rahman
 Apache 2.0 Open Source License
 
 **DISCLAIMER:**
-This program is not guarenteed to generate profits nor is qualified to offer financial advice for the end user. Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business related questions. Please use discretion when utilizing, modifying, trading with this program. The authors of this program are not entitled or liable for the end user's personal trading decisions nor profits. This open scource project will remain free and always be free. If you have bought this program with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal council.
+This program is not guarenteed to generate profits nor is qualified to offer financial advice for the end user (Any entities including but not limited to I, we, they, them, company, etc.). Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business related questions. Please use discretion when utilizing, modifying, trading with this program. THE AUTHORS OF THIS PROGRAM ARE NOT AND WILL NOT BE ENTITLED OR LIABLE FOR THE END USER'S PERSONAL TRADING DECISIONS NOR PROFITS NOR DAMAGES. There are no gaurentees and/or warranties regarding the end user's use of this program and success in the end user's trading. This program does not reflect the author's opinions and decisions, implied nor expressed, and vise versa. The end user should knowingly be an age of 18 years or older and trade responsibly when using this program. This open scource project will remain free and always be free. If you have bought this program with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal council.
