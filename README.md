@@ -4,6 +4,8 @@ Project GoldenTrades is a stock charting Java program that is intended to assist
 
 Java and the Java Library xChart is utilized for the creation of this program due to the relative ease and convienence of making fast programs with graphs/charts.
 
+Please make sure that you have version Java 8 or higher and the latest xChart update to be able to run this program effectively.
+
 Currently, the development of this working prototype does not have all the features that are going to be present in the final non-prototype build. All features, User Interfaces (U.I.), and methodologies are subject to change during development and improvements of this and future working prototypes. What this working prototype is supposed to have is:
 
 * A simple static graph that shows the stock price of a single stock ticker that has slight prediction capabilities.
