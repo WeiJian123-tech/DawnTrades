@@ -5,9 +5,23 @@ import java.io.*;
 import java.math.*;
 
 public class StockInput {
-
+	
+	List<String> dates;
+	List<Double> openPrices;
+	List<Double> highPrices;
+	List<Double> lowPrices;
+	List<Double> closePrices;
+	List<Double> adjClosePrices;
+	List<BigInteger> volumes;
+	
 	public StockInput() {
-		
+		dates = new ArrayList<>();
+		openPrices = new ArrayList<>();
+		highPrices = new ArrayList<>();
+		lowPrices = new ArrayList<>();
+		closePrices = new ArrayList<>();
+		adjClosePrices = new ArrayList<>();
+		volumes = new ArrayList<>();
 	}
 	
 	public void insertStockData(File stockData) {
@@ -22,13 +36,13 @@ public class StockInput {
 		double[] volumes = new double[inputCatcher.size()];
 		*/
 		
-		List<String> dates = new ArrayList<>();
-		List<Double> openPrices = new ArrayList<>();
-		List<Double> highPrices = new ArrayList<>();
-		List<Double> lowPrices = new ArrayList<>();
-		List<Double> closePrices = new ArrayList<>();
-		List<Double> adjClosePrices = new ArrayList<>();
-		List<BigInteger> volumes = new ArrayList<>();
+		dates = new ArrayList<>();
+		openPrices = new ArrayList<>();
+		highPrices = new ArrayList<>();
+		lowPrices = new ArrayList<>();
+		closePrices = new ArrayList<>();
+		adjClosePrices = new ArrayList<>();
+		volumes = new ArrayList<>();
 		
 		try {
 			Scanner input = new Scanner(stockData);
@@ -67,5 +81,33 @@ public class StockInput {
 			System.out.println(e.getMessage());
 		}
 		
+	}
+	
+	public List<String> getDates() {
+		return dates;
+	}
+	
+	public List<Double> getOpenPrices() {
+		return openPrices;
+	}
+	
+	public List<Double> getHighPrices() {
+		return highPrices;
+	}
+	
+	public List<Double> getLowPrices() {
+		return lowPrices;
+	}
+	
+	public List<Double> getClosePrices() {
+		return closePrices;
+	}
+	
+	public List<Double> getAdjClosePrices() {
+		return adjClosePrices;
+	}
+	
+	public List<BigInteger> getVolumes() {
+		return volumes;
 	}
 }

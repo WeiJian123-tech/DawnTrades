@@ -14,7 +14,6 @@ package Prototype_003;
 
 import org.knowm.xchart.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Main {
 
@@ -31,15 +30,17 @@ public class Main {
 		 * 10.0, 12.0, 23.0, 22.0, 16.0, 23.0, 21.0, 16.0, 17.0, 19.0
 		 */
 		
+		
 		StockInput si = new StockInput();
 		
+		/*
 		si.insertStockData(
-				/*
+				
 				new File(
 						"C:/Users/ZhenF/eclipse-workspace/"
 						+ "AutomaticTradingProgram/src/Prototype_003/SingularStockPriceTest.csv"
 						)
-				*/
+				
 				
 				new File(
 						"C:/Users/ZhenF/eclipse-workspace/AutomaticTradingProgram/src/Prototype_003/MSFT.csv"
@@ -53,15 +54,14 @@ public class Main {
 				10.26, 10.30
 		};
 		
-		BackEnd tradeAlgo = new BackEnd(yPrices);
+		*/
+		
+		BackEnd tradeAlgo = new BackEnd();
 		
 		StockOHLCChart candlestickChart = new StockOHLCChart();
 		
-		OHLCChart csChart = candlestickChart.OHLCGraph(yPrices, tradeAlgo);
+		OHLCChart csChart = candlestickChart.OHLCGraph(si, tradeAlgo);
 		
 		new SwingWrapper<>(csChart).displayChart();
-		
-		//RealTimeStockChart realTimeStockChart = new RealTimeStockChart();
-		//realTimeStockChart.realTimeChart(yPrices, tradeAlgo);
 	}
 }

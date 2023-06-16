@@ -2,8 +2,6 @@ package Prototype_003;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelListener;
 import java.util.*;
 
 public class CandleStickWindow extends JFrame {

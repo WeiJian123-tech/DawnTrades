@@ -5,7 +5,6 @@ package Prototype_003;
  */
 
 import java.util.*;
-import java.math.*;
 
 public class BackEnd {
 
@@ -42,6 +41,7 @@ public class BackEnd {
       		double rsi = 0;
 
       		for (int i = periods; i < closingPrices.length; i++) {
+      			
           		if (i == periods) {
               			double gainSum = 0.0;
               			double lossSum = 0.0;
@@ -64,18 +64,22 @@ public class BackEnd {
               			rsi = 100 - (100 / (1 + relativeStrength));
 
               			rsiValues[i] = rsi;
-          		} else if (i > periods) {
-              			double diff = closingPrices[i] - closingPrices[i - 1];
-              			double currGain = diff > 0 ? diff : 0;
-              			double currLoss = diff < 0 ? Math.abs(diff) : 0;
-              			prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
-              			prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
-              			relativeStrength = prevAvgGain / prevAvgLoss;
-
-              			rsi = 100 - (100 / (1 + relativeStrength));
-
-              			rsiValues[i] = rsi;
           		}
+          		
+          		if (i > periods) {
+          			double diff = closingPrices[i] - closingPrices[i - 1];
+          			double currGain = diff > 0 ? diff : 0;
+          			double currLoss = diff < 0 ? Math.abs(diff) : 0;
+          			prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
+          			prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
+          			relativeStrength = prevAvgGain / prevAvgLoss;
+
+          			rsi = 100 - (100 / (1 + relativeStrength));
+
+          			rsiValues[i] = rsi;
+          		}
+          		
+          		
       		}
 
       		return rsiValues;
@@ -153,7 +157,7 @@ public class BackEnd {
 	
 	//Front end MACD method
 	public List<Double> calculateMACDLine(
-			double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod, int periods
+			double[] closingPrices, int shortPeriod, int longPeriod, int periods
 			) {
 		double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
 		double[] longEMA = calculateEMA(closingPrices, longPeriod);
@@ -211,7 +215,9 @@ public class BackEnd {
   				rsi = 100 - (100 / (1 + relativeStrength));
     
   				rsiValues.add(i, rsi);
-  			} else if(i > periods){
+  			}
+  			
+  			if(i > periods){
   				double diff = closingPrices[i] - closingPrices[i - 1];
   				double currGain = diff > 0 ? diff : 0;
   				double currLoss = diff < 0 ? Math.abs(diff) : 0;
@@ -260,27 +266,6 @@ public class BackEnd {
 			movAvgs.add(sum / periods);
 		}
 		
-		/*
-		for(int i = 0; i < closingPrices.length; i++) {
-			
-			//Adds null elements until period.
-			if (i < periods) {
-		        movAvgs.add(null);
-		        continue;
-		      }
-			
-			//Then adds to the sum the elements from index i - j to the array.
-			
-			double sum = 0.0;
-			
-			for(int j = 0; j < periods; j++) {
-				sum += closingPrices[i - j];
-			}
-			
-			movAvgs.add(sum / periods);
-		}
-		*/
-		
 		//long endTime = System.nanoTime();
 		//long totalTime = endTime - startTime;
 		//System.out.println("duration: " + totalTime);
@@ -294,13 +279,12 @@ public class BackEnd {
 	private List<Double> standardDeviation(double[] closingPrices, int periods) {
 		
 		List<Double> stdDevs = new ArrayList<>();
-		//List<Double> movAvgs = simpleMovingAverage(closingPrices, periods);
 		
 		for(int i = 0; i < periods; i++) {
 			stdDevs.add(null);
 		}
 		
-		double sum = 0.0, sumOfSquares = 0.0, variance = 0.0, standardDeviation = 0.0;
+		double sum = 0.0, sumOfSquares = 0.0, standardDeviation = 0.0;
 		
 		//Sliding Door Approach
 		for(int i = 0; i < periods; i++) {
@@ -328,40 +312,20 @@ public class BackEnd {
 			stdDevs.add(standardDeviation);
 		}
 		
-		
-		/*
-		for(int i = 0; i < closingPrices.length; i++) {
-			
-			if(i < periods) {
-				stdDevs.add(null);
-				continue;
-			}
-			
-			double sumOfSquares = 0.0, variance = 0.0, standardDeviation = 0.0;
-			
-			for(int j = 0; j < periods; j++) {
-				double sum = 0.0;
-				
-				sum += movAvgs.get(i) - closingPrices[i - j];
-				sumOfSquares += Math.pow( sum, 2);
-			}
-			
-			variance = sumOfSquares / periods;
-			
-			standardDeviation = Math.sqrt(variance);
-			
-			stdDevs.add(standardDeviation);
-		}
-		*/
-		
 		return stdDevs;
 	}
 	
+	/*
+	 * Links for Bollinger Bands:
+	 * Fidelity summary: https://is.gd/mof0KQ
+	 * Investopedia explanation: https://is.gd/cQeFkF
+	 * Stock Charts Formula: https://is.gd/oFRc9L
+	*/
 	private List<Double> upperBollingerBand(double[] closingPrices, int periods) {
 		//The middle bollinger band is the moving average
-		List<Double> movAvg = simpleMovingAverage(priceData, periods);
+		List<Double> movAvg = simpleMovingAverage(closingPrices, periods);
 		
-		List<Double> stdDev = standardDeviation(priceData, periods);
+		List<Double> stdDev = standardDeviation(closingPrices, periods);
 		
 		List<Double> upBollBand = new ArrayList<>();
 		
@@ -378,9 +342,9 @@ public class BackEnd {
 	}
 	
 	private List<Double> lowerBollingerBand(double[] closingPrices, int periods) {
-		List<Double> movAvg = simpleMovingAverage(priceData, periods);
+		List<Double> movAvg = simpleMovingAverage(closingPrices, periods);
 		
-		List<Double> stdDev = standardDeviation(priceData, periods);
+		List<Double> stdDev = standardDeviation(closingPrices, periods);
 		
 		List<Double> lowBollBand = new ArrayList<>();
 		
@@ -395,71 +359,6 @@ public class BackEnd {
 		
 		return lowBollBand;
 	}
-	
-	/*
-	private double movingAverage(List<Double> priceData2, int periods) {
-		
-		double movingAverage = 0.0;
-		
-		for(Double prices: priceData2) {
-			movingAverage += prices;
-		}
-		
-		movingAverage /= periods;
-		
-		return movingAverage;
-	}
-	*/
-	
-	/*
-	private double standardDeviation(List<Double> closingPrices, int periods) {
-		
-		double sum = 0.0, standardDeviation = 0.0;
-		
-		for(Double prices: closingPrices) {
-			sum += prices;
-		}
-		
-		double mean = sum/periods;
-		
-		for(Double prices: closingPrices) {
-			standardDeviation += Math.pow(prices - mean, 2);
-		}
-		
-		return standardDeviation;
-	}
-	*/
-	
-	/*
-	 * Links for Bollinger Bands:
-	 * Fidelity summary: https://is.gd/mof0KQ
-	 * Investopedia explanation: https://is.gd/cQeFkF
-	 * Stock Charts Formula: https://is.gd/oFRc9L
-	*/
-	
-	/*
-	//Calculate upper bollinger band
-	private double upperBollingerBand(List<Double> closingPrices, int periods) {
-		
-		//The middle bollinger band is the moving average
-		double movAvg = movingAverage(closingPrices, periods);
-		
-		double stdDev = standardDeviation(closingPrices, periods);
-		
-		return movAvg + (stdDev * 2);
-	}
-	
-	//Calculate lower bollinger band
-	private double lowerBollingerBand(List<Double> priceData2, int periods) {
-		
-		//The middle bollinger band is the moving average
-		double movAvg = movingAverage(priceData2, periods);
-		
-		double stdDev = standardDeviation(priceData2, periods);
-		
-		return movAvg - (stdDev * 2);
-	}
-	*/
 	
 	//Calculate Fibonacci Retracement levels of a stock at 2 points. Updates only when a new high or low is detected.
 	//Links: https://is.gd/aRjSTM && https://is.gd/D0sR5w
@@ -570,9 +469,9 @@ public class BackEnd {
 	}
 	
 	public List<Double> getMACD(
-			double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod, int periods
+			double[] closingPrices, int shortPeriod, int longPeriod, int periods
 			) {
-		return calculateMACDLine(closingPrices, shortPeriod, longPeriod, signalPeriod, periods);
+		return calculateMACDLine(closingPrices, shortPeriod, longPeriod, periods);
 	}
 	
 	public List<Double> getEMA(double[] closingPrices, int periods) {
@@ -590,30 +489,6 @@ public class BackEnd {
 		return calculateFibonacciRetracementLevels(highPrice, lowPrice, level);
 	}
 	*/
-	
-	private double setHigh(double close, double originalPrice) {
-		return close + (originalPrice * 0.02);
-	}
-	
-	private double setLow(double close, double originalPrice) {
-		return close - (originalPrice * 0.02);
-	}
-	
-	private double setNewClose(double nextPrice) {
-		return nextPrice;
-	}
-	
-	public double getHigh(double close, double originalPrice) {
-		return setHigh(close, originalPrice);
-	}
-	
-	public double getLow(double close, double originalPrice) {
-		return setLow(close, originalPrice);
-	}
-	
-	public double getNewClose(double nextPrice) {
-		return setNewClose(nextPrice);
-	}
 	
 	public double[] getPriceData() {
 		return priceData;
