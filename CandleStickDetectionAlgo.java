@@ -45,9 +45,15 @@ public class CandleStickDetectionAlgo {
   	    boolean bottomWick = (lowerShadow <= 0.1 * bodyLength && upperShadow == 0);
 
   	    if (isBull) {
-  	        s = isFull ? date + " Bull Marubozu Full Detected" : topWick ? date + " Bull Marubozu Open Detected" : bottomWick ? date + " Bull Marubozu Close Detected" : null;
+  	        s = isFull ? 
+  	        		date + " Bull Marubozu Full Detected" : topWick ?
+  	        				date + " Bull Marubozu Open Detected" : bottomWick ?
+  	        						date + " Bull Marubozu Close Detected" : null;
   	    } else {
-  	        s = isFull ? date + " Bear Marubozu Full Detected" : topWick ? date + " Bear Marubozu Close Detected" : bottomWick ? date + " Bear Marubozu Open Detected" : null;
+  	        s = isFull ?
+  	        		date + " Bear Marubozu Full Detected" : topWick ?
+  	        				date + " Bear Marubozu Close Detected" : bottomWick ?
+  	        						date + " Bear Marubozu Open Detected" : null;
   	    }
   	    return s;
   	}
@@ -62,7 +68,9 @@ public class CandleStickDetectionAlgo {
 
   		if ((close - open > 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
   			return date + " Bull Marubozu Detected";
-  		} else if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
+  		}
+  		
+  		if ((close - open < 0) && (upperShadow <= 0.1 * bodyLength && lowerShadow <= 0.1 * bodyLength)) {
   			return date + " Bear Marubozu Detected";
   		}
   		
@@ -94,18 +102,27 @@ public class CandleStickDetectionAlgo {
 	    		lowerShadow >= totalLength * 0.4
 	    		) {
 	      return date + " Long-Legged Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (lowerShadow > (3 * bodyLength)) &&
+	    }
+	    
+	    if ((bodyLength < totalLength * 0.1) && (lowerShadow > (3 * bodyLength)) &&
 	      (upperShadow < bodyLength)) {
 	      return date + " Dragon Fly Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * bodyLength)) &&
+	    }
+	    
+	    if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * bodyLength)) &&
 	      (lowerShadow <= bodyLength)) {
 	      return date + " Gravestone Doji Detected";
-	    } else if (bodyLength <= totalLength * 0.1 && upperShadow == 0 && lowerShadow == 0) {
+	    }
+	    
+	    if (bodyLength <= totalLength * 0.1 && upperShadow == 0 && lowerShadow == 0) {
 	      return date + " Four-Price Doji Detected";
-	    } else if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * Math.abs(close - open))) &&
+	    }
+	    
+	    if ((bodyLength < totalLength * 0.1) && (upperShadow > (3 * Math.abs(close - open))) &&
 	      (lowerShadow > (3 * bodyLength))) {
 	      return date + " Regular Doji Detetced";
 	    }
+	    
 	    return null;
 	  }
 
@@ -121,7 +138,9 @@ public class CandleStickDetectionAlgo {
 				(open - close) > (prevClose - prevOpen)
 				){
   			return date + " Bearish Engulfment Detected";
-		} else if(
+		}
+		
+		if(
 				close >= prevOpen &&
 				prevOpen > prevClose &&
 				close > open &&
@@ -130,6 +149,7 @@ public class CandleStickDetectionAlgo {
 				){
   			return date + " Bullish Engulfment Detected";
 		}
+		
 		return null;
   	}
 	

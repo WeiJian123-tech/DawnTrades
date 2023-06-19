@@ -61,8 +61,8 @@ public class CandleStickWindow extends JFrame {
 		this.closeData = closeData;
 	}
 
+	
 	public void createWindow() {
-		//Pop-up window could appear for real-time charts.
 		
 		setTitle("Candlestick Detections");
 		setBackground(Color.WHITE);
@@ -70,12 +70,18 @@ public class CandleStickWindow extends JFrame {
 		setPreferredSize(new Dimension(600, 600));
 		
 		//https://stackoverflow.com/a/10346673/11628809
+		//https://stackoverflow.com/a/9198963/11628809
 		
 		JPanel csPanel = new JPanel();
 		
-		csPanel.setMinimumSize(new Dimension(500, 500));
-		csPanel.setPreferredSize(new Dimension(600, 600));
 		csPanel.setLayout(new BoxLayout(csPanel, BoxLayout.PAGE_AXIS));
+		
+		JScrollPane scrollPane = new JScrollPane(csPanel);
+		
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.getViewport().setMinimumSize(new Dimension(500, 500));
+		scrollPane.getViewport().setPreferredSize(new Dimension(600, 600));
 		
 		String detectMarb = "";
 		String detectMarbFlex = "";
@@ -84,6 +90,9 @@ public class CandleStickWindow extends JFrame {
 		String detectEngulf = "";
 		String detectMornStar = "";
 		String detectEvnnStar = "";
+		
+		csPanel.add(new JLabel("Detect Marubozu & Doji: " + "\n"));
+		csPanel.add(new JLabel("\n"));
 		
 		for(int i = 0; i < closeData.length; i++) {
 			detectMarb = cda.detectMarubozu(
@@ -111,7 +120,14 @@ public class CandleStickWindow extends JFrame {
 			csPanel.add(marbFlexLabel);
 			csPanel.add(dojiLabel);
 			csPanel.add(dojVarLabel);
+			
+			csPanel.revalidate();
+			scrollPane.revalidate();
 		}
+		
+		csPanel.add(new JLabel("\n"));
+		csPanel.add(new JLabel("\n" + "Detect Engulf: " + "\n"));
+		csPanel.add(new JLabel("\n"));
 		
 		for(int i = 0; i < closeData.length - 1; i++) {
 			detectEngulf = cda.detectEngulf(
@@ -122,7 +138,14 @@ public class CandleStickWindow extends JFrame {
 			JLabel engulfLabel = new JLabel(detectEngulf);
 			
 			csPanel.add(engulfLabel);
+			
+			csPanel.revalidate();
+			scrollPane.revalidate();
 		}
+		
+		csPanel.add(new JLabel("\n"));
+		csPanel.add(new JLabel("\n" + "Detect Morning Star & Evening Star: " + "\n"));
+		csPanel.add(new JLabel("\n"));
 		
 		for(int i = 0; i < closeData.length - 2; i++) {
 			detectMornStar = cda.detectMorningStar(
@@ -150,16 +173,17 @@ public class CandleStickWindow extends JFrame {
 			
 			csPanel.add(mornStarLabel);
 			csPanel.add(evnnStarLabel);
+			
+			csPanel.revalidate();
+			scrollPane.revalidate();
 		}
 		
-		JScrollPane scrollPane = new JScrollPane(csPanel);
+		csPanel.add(new JLabel("\n"));
 		
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setMinimumSize(new Dimension(500, 500));
-		scrollPane.setPreferredSize(new Dimension(600, 600));
+		csPanel.revalidate();
+		scrollPane.revalidate();
 		
-		add(scrollPane);
+		add(scrollPane, BorderLayout.CENTER);
 		
 		pack();
 		setVisible(true);

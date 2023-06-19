@@ -115,18 +115,6 @@ public class BackEnd {
 		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
   	}
 	
-	/*
-	private List<Double> calcMACD(double[] closingPrices, int shortPeriod, int longPeriod, int signalPeriod) {
-		List<Double> macdList = new ArrayList<>();
-		
-		for(int i = 0; i < closingPrices.length; i++) {
-			macdList.add(calculateMACD(closingPrices, shortPeriod, longPeriod, signalPeriod));
-		}
-		
-		return macdList;
-	}
-	*/
-	
 	//Front End EMA method  Link: https://is.gd/m2Q5WI
 	public List<Double> calculateEMALine(double[] closingPrices, int periods) {
 		
@@ -179,6 +167,8 @@ public class BackEnd {
 		return macdLine;
 	}
 	
+	//Sliding Door Approach/Window Sliding Technique: https://www.geeksforgeeks.org/window-sliding-technique/#
+	//Reverse for loop: https://is.gd/GTBAgX 
 	//THE RSI LINE TO BE PLOTTED IN FRONT END	
   	public List<Double> calculateRSILine(double[] closingPrices, int periods) {
   		List<Double> rsiValues = new ArrayList<Double>();
@@ -191,44 +181,41 @@ public class BackEnd {
   		for(int i = 0; i < periods; i++) {
   			rsiValues.add(null);
   		}
+  		
+  		double gainSum = 0.0;
+		double lossSum = 0.0;
+		
+		for(int j = periods - 1; j >= 0; j--) {
+			double priceDiff = closingPrices[j + 1] - closingPrices[j];
+			if (priceDiff > 0) {
+				gainSum += priceDiff;
+			} else {
+				lossSum -= priceDiff;
+			}
+		}
 
-  		for (int i = periods; i < closingPrices.length; i++) {
-  			if(i == periods){
-  				double gainSum = 0.0;
-  				double lossSum = 0.0;
-    
-  				for (int j = i - periods; j < i; j++) {
-  					double priceDiff = closingPrices[j + 1] - closingPrices[j];
-  					if (priceDiff > 0) {
-  						gainSum += priceDiff;
-  					} else {
-  						lossSum -= priceDiff;
-  					}
-  				}
-    
-  				double averageGain = gainSum / periods;
-  				double averageLoss = lossSum / periods;
-  				prevAvgGain = averageGain;
-  				prevAvgLoss = averageLoss;
-    
-  				relativeStrength = averageGain / averageLoss;
-  				rsi = 100 - (100 / (1 + relativeStrength));
-    
-  				rsiValues.add(i, rsi);
-  			}
+		double averageGain = gainSum / periods;
+		double averageLoss = lossSum / periods;
+		prevAvgGain = averageGain;
+		prevAvgLoss = averageLoss;
+
+		relativeStrength = averageGain / averageLoss;
+		rsi = 100 - (100 / (1 + relativeStrength));
+
+		rsiValues.add(1, rsi);
+
+  		for (int i = periods + 1; i < closingPrices.length; i++) {
   			
-  			if(i > periods){
-  				double diff = closingPrices[i] - closingPrices[i - 1];
-  				double currGain = diff > 0 ? diff : 0;
-  				double currLoss = diff < 0 ? Math.abs(diff) : 0;
-  				prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
-  				prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
-  				relativeStrength = prevAvgGain / prevAvgLoss;
-          
-  				rsi = 100 - (100 / (1 + relativeStrength));
+  			double diff = closingPrices[i] - closingPrices[i - 1];
+			double currGain = diff > 0 ? diff : 0;
+			double currLoss = diff < 0 ? Math.abs(diff) : 0;
+			prevAvgGain = (prevAvgGain * (periods - 1) + currGain) / periods;
+			prevAvgLoss = (prevAvgLoss * (periods - 1) + currLoss) / periods;
+			relativeStrength = prevAvgGain / prevAvgLoss;
+  
+			rsi = 100 - (100 / (1 + relativeStrength));
 
-  				rsiValues.add(i, rsi);
-  			}
+			rsiValues.add(i, rsi);
   		}
     
   		return rsiValues;

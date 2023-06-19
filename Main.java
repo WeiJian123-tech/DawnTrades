@@ -62,6 +62,6 @@ public class Main {
 		
 		OHLCChart csChart = candlestickChart.OHLCGraph(si, tradeAlgo);
 		
-		new SwingWrapper<>(csChart).displayChart();
+		//new SwingWrapper<>(csChart).displayChart();
 	}
 }

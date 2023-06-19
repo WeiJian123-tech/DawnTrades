@@ -70,7 +70,7 @@ public class StockOHLCChart {
 		if(xTime.length < 30) {
 			chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 5)).setMarker(
 					SeriesMarkers.NONE
-					);;
+					);
 			//chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 10));
 			//chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 15));
 		} else {
@@ -94,9 +94,7 @@ public class StockOHLCChart {
 		chart.addSeries("Lower Bollinger Band", xTimeList, tradeAlgo.getLowerBand(closePrices, 5)).setMarker(
 				SeriesMarkers.NONE
 				);
-		*/
 		
-		/*
 		if(xTime.length < 30) {
 			chart.addSeries("EMA5", xTimeList, tradeAlgo.getEMA(closePrices, 5));
 		} else {
@@ -106,7 +104,6 @@ public class StockOHLCChart {
 		}
 		*/
 		
-		/*
 		XYChart xtraChart = new XYChartBuilder().width(800).height(500).title("Extra Stock Indicators").build();
 		
 		xtraChart.getStyler().setLegendPosition(LegendPosition.OutsideE);
@@ -128,7 +125,6 @@ public class StockOHLCChart {
 		xtraChart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closePrices, 5)).setMarker(SeriesMarkers.NONE);
 		
 		new SwingWrapper<XYChart>(xtraChart).displayChart();
-		*/
 		
 		CandleStickDetectionAlgo cda = new CandleStickDetectionAlgo();
 		
