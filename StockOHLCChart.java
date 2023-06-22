@@ -5,12 +5,8 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.knowm.xchart.OHLCChart;
 import org.knowm.xchart.OHLCChartBuilder;
 import org.knowm.xchart.SwingWrapper;
@@ -18,12 +14,19 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
-import org.knowm.xchart.style.markers.Marker;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 public class StockOHLCChart {
 
 	public OHLCChart OHLCGraph(StockInput si, BackEnd tradeAlgo) {
+		
+		/*
+		si.insertStockData(
+				new File(
+						"C:/Users/ZhenF/eclipse-workspace/AutomaticTradingProgram/src/Prototype_003/MSFT.csv"
+						)
+				);
+		*/
 		
 		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("Project GoldenTrades").build();
 		
@@ -32,12 +35,20 @@ public class StockOHLCChart {
 		chart.getStyler().setYAxisDecimalPattern("##.00");
 		chart.getStyler().setToolTipsEnabled(true);
 		
-		si.insertStockData(
-				new File(
-						"C:/Users/ZhenF/eclipse-workspace/AutomaticTradingProgram/src/Prototype_003/MSFT.csv"
-						)
-				);
+		/*
+		try {
+			si.populateData(
+					si.getXDates(), si.getOpenPrices(), si.getHighPrices(), si.getLowPrices(),
+					si.getClosePrices(), si.getAdjClosePrices(), si.getVolumes(), si.getXDateList(),
+					si.getDates(), si.getOpenPriceList(), si.getHighPriceList(), si.getLowPriceList(),
+					si.getClosePriceList(), si.getAdjClosePriceList(), si.getVolumeList()
+					);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		*/
 		
+		/*
 		List<Date> xTimeList = new ArrayList<>();
 		
 		Date[] xTime = new Date[si.getDates().size()];
@@ -59,35 +70,33 @@ public class StockOHLCChart {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		*/
 		
 		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
 		
 		chart.addSeries(
-				"Candlestick", xTimeList, si.getOpenPrices(), si.getHighPrices(), si.getLowPrices(),
-				si.getClosePrices()
+				"Candlestick", si.getXDateList(), si.getOpenPriceList(), si.getHighPriceList(), si.getLowPriceList(),
+				si.getClosePriceList()
 				);
-		
+		/*
 		if(xTime.length < 30) {
 			chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 5)).setMarker(
 					SeriesMarkers.NONE
 					);
-			//chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 10));
-			//chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 15));
+			chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 10));
+			chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 15));
 		} else {
 			chart.addSeries("SMA5", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 5)).setMarker(
 					SeriesMarkers.NONE
 					);
-			/*
 			chart.addSeries("SMA10", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 10)).setMarker(
 					SeriesMarkers.NONE
 					);
 			chart.addSeries("SMA15", xTimeList, tradeAlgo.getSimpleMovingAverage(closePrices, 15)).setMarker(
 					SeriesMarkers.NONE
 					);
-			*/
 		}
 		
-		/*
 		chart.addSeries("Upper Bollinger Band", xTimeList, tradeAlgo.getUpperBand(closePrices, 5)).setMarker(
 				SeriesMarkers.NONE
 				);
@@ -102,39 +111,18 @@ public class StockOHLCChart {
 					SeriesMarkers.NONE
 					);
 		}
-		*/
-		
-		XYChart xtraChart = new XYChartBuilder().width(800).height(500).title("Extra Stock Indicators").build();
-		
-		xtraChart.getStyler().setLegendPosition(LegendPosition.OutsideE);
-		xtraChart.getStyler().setLegendLayout(LegendLayout.Vertical);
-		xtraChart.getStyler().setYAxisDecimalPattern("##.00");
-		xtraChart.getStyler().setToolTipsEnabled(true);
-		xtraChart.getStyler().setZoomEnabled(true);
-		xtraChart.getStyler().setZoomResetByButton(true);
-		xtraChart.getStyler().setZoomResetByDoubleClick(true);
-		
-		//Common MACD: 12, 26, 9
-		xtraChart.addSeries("stdDev", xTimeList, tradeAlgo.getStandardDeviation(closePrices, 5)).setMarker(
-				SeriesMarkers.NONE
-				);
-		xtraChart.addSeries("MACD", xTimeList, tradeAlgo.getMACD(closePrices, 12, 26, 5)).setMarker(
-				SeriesMarkers.NONE
-				);
-		xtraChart.addSeries("EMA9 (Signal Line)", xTimeList, tradeAlgo.getEMA(closePrices, 9));
-		xtraChart.addSeries("RSI", xTimeList, tradeAlgo.getRSI(closePrices, 5)).setMarker(SeriesMarkers.NONE);
-		
-		new SwingWrapper<XYChart>(xtraChart).displayChart();
 		
 		CandleStickDetectionAlgo cda = new CandleStickDetectionAlgo();
 		
 		CandleStickWindow csw = new CandleStickWindow(cda, xTime, openPrices, highPrices, lowPrices, closePrices);
 		csw.createWindow();
 		
+		*/
+		
 		return chart;
 	}
 	
-	private void populateData(
+	protected void populateData(
 			Date[] xTime, double[] openPrices, double[] highPrices, double[] lowPrices, double[] closePrices,
 			double[] adjClosePrices, BigInteger[] volumes, List<Date> xTimeList, List<String> datesList,
 			List<Double> openPricesList, List<Double> highPricesList, List<Double> lowPricesList,
