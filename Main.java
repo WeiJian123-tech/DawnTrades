@@ -29,19 +29,21 @@ public class Main {
 			
 		});
 		
-		//StockInputWindow siw = new StockInputWindow();
+		/*
+		StockInputWindow siw = new StockInputWindow();
 		
-		//siw.createWindow();
+		siw.createWindow();
 		
-		//StockInput si = new StockInput();
+		StockInput si = new StockInput();
 		
-		//BackEnd tradeAlgo = new BackEnd();
+		BackEnd tradeAlgo = new BackEnd();
 		
-		//StockOHLCChart candlestickChart = new StockOHLCChart();
+		StockOHLCChart candlestickChart = new StockOHLCChart();
 		
-		//OHLCChart csChart = candlestickChart.OHLCGraph(si, tradeAlgo);
+		OHLCChart csChart = candlestickChart.OHLCGraph(si, tradeAlgo);
 		
-		//new SwingWrapper<>(csChart).displayChart();
+		new SwingWrapper<>(csChart).displayChart();
+		*/
 		
 	}
 }

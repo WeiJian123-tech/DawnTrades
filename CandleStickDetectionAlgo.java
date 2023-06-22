@@ -1,8 +1,6 @@
 package Prototype_003;
 
-import java.util.Date;
 import java.util.List;
-
 import javax.swing.JLabel;
 
 public class CandleStickDetectionAlgo extends TabbedFrontEnd {
