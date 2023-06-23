@@ -102,9 +102,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 						dateList.get(i), openData[i], highData[i], lowData[i], closeData[i]
 						);
   				
-  				JLabel marbLabel = new JLabel(detectMarb);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectMarb);
   				
-  				TabbedFrontEnd.csPanel.add(marbLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -142,9 +142,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 							dateList.get(i), openData[i], highData[i], lowData[i], closeData[i]
 							);
   				
-  				JLabel marbFlexLabel = new JLabel(detectMarbFlex);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectMarbFlex);
   				
-  				TabbedFrontEnd.csPanel.add(marbFlexLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -176,9 +176,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 						dateList.get(i), openData[i], highData[i], lowData[i], closeData[i]
 						);
   				
-  				JLabel dojiLabel = new JLabel(detectDoji);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectDoji);
   				
-  				TabbedFrontEnd.csPanel.add(dojiLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -234,9 +234,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 	  					dateList.get(i), openData[i], highData[i], lowData[i], closeData[i]
 							);
   				
-  				JLabel dojVarLabel = new JLabel(detectDojVar);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectDojVar);
   				
-  				TabbedFrontEnd.csPanel.add(dojVarLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -289,9 +289,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 						closeData[i + 1], openData[i], highData[i], lowData[i], closeData[i]
 								);
   				
-  				JLabel engulfLabel = new JLabel(detectEngulf);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectEngulf);
   				
-  				TabbedFrontEnd.csPanel.add(engulfLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -343,9 +343,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 						closeData[i]
 								);
   				
-  				JLabel mornStarLabel = new JLabel(detectMornStar);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectMornStar);
   				
-  				TabbedFrontEnd.csPanel.add(mornStarLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();
@@ -394,9 +394,9 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
 						closeData[i]
 								);
   				
-  				JLabel evnnStarLabel = new JLabel(detectEvnnStar);
+  				TabbedFrontEnd.detectLabel = new JLabel(detectEvnnStar);
   				
-  				TabbedFrontEnd.csPanel.add(evnnStarLabel);
+  				TabbedFrontEnd.csPanel.add(detectLabel);
   				
   				TabbedFrontEnd.csPanel.revalidate();
   				TabbedFrontEnd.scrollPane.revalidate();

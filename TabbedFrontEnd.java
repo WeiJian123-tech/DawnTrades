@@ -14,11 +14,15 @@ public class TabbedFrontEnd extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
 	protected static JScrollPane scrollPane;
-	private JPanel inputPanel,stockCont, extraStockCont;
+	private JPanel inputPanel, inputTxtPanel, searchPanel, stockCont, extraStockCont;
 	protected static JPanel csPanel;
 	private JPanel settingsPanel;
+	private JLabel inputPrompt, categoryTxt, cautionTxt;
+	protected static JLabel detectLabel;
 	private Dimension minSize, prefSize;
 	private GridBagConstraints gbc;
+	private Font regularFont, bigFont;
+	private boolean isDay, isSmall;
 	
 	public TabbedFrontEnd() {
 		tabbedPane = new JTabbedPane();
@@ -30,12 +34,21 @@ public class TabbedFrontEnd extends JFrame {
 		settingsPanel = new JPanel();
 		minSize = new Dimension(500, 500);
 		prefSize = new Dimension(650, 600);
+		inputPrompt = new JLabel();
+		categoryTxt = new JLabel();
+		cautionTxt = new JLabel();
+		detectLabel = new JLabel();
 		gbc = new GridBagConstraints();
+		regularFont = new Font("Arial Black", Font.PLAIN, 12);
+		bigFont = new Font("Arial Black", Font.PLAIN, 18);
+		isDay = false;
+		isSmall = false;
 	}
 	
 	public void createAndDisplayGUI() {
 		setMinimumSize(new Dimension(500, 500));
 		setPreferredSize(new Dimension(600, 600));
+		setBackground(new Color(255, 255, 255));
 		setTitle("Project GoldenTrades");
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +70,8 @@ public class TabbedFrontEnd extends JFrame {
 		
 		tabbedPane.setMinimumSize(new Dimension(500, 500));
 		tabbedPane.setPreferredSize(new Dimension(600, 600));
+		tabbedPane.setBackground(new Color(107, 223, 255));
+		tabbedPane.setFont(regularFont);
 		tabbedPane.setBackground(getBackground());
 		
 		inputTab(si, tradeAlgo, csda);
@@ -71,25 +86,30 @@ public class TabbedFrontEnd extends JFrame {
 		
 		inputPanel.setMinimumSize(minSize);
 		inputPanel.setPreferredSize(prefSize);
-		inputPanel.setBackground(new Color(159, 196, 245));
+		inputPanel.setBackground(new Color(184, 228, 255));
 		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
 		
-		JPanel inputTxtPanel = new JPanel();
+		inputTxtPanel = new JPanel();
 		
 		inputTxtPanel.setMinimumSize(new Dimension(500, 175));
 		inputTxtPanel.setPreferredSize(new Dimension(600, 200));
+		inputTxtPanel.setBackground(new Color(184, 228, 255));
 		
-		JLabel inputPrompt = new JLabel(
+		inputPrompt.setFont(regularFont);
+		categoryTxt.setFont(regularFont);
+		cautionTxt.setFont(regularFont);
+		
+		inputPrompt = new JLabel(
 				"Please Upload .csv File that includes these categories: "
 				);
 		
-		JLabel categoryTxt = new JLabel(
+		categoryTxt = new JLabel(
 				"\n" +
 				"Date,Open,High,Low,Close,Adj Close,Volume" +
 				"\n"
 				);
 		
-		JLabel cautionTxt = new JLabel(
+		cautionTxt = new JLabel(
 				"\n" +
 				"Please also make sure that you have permissions to be able to access your file" +
 				"\n"
@@ -102,10 +122,11 @@ public class TabbedFrontEnd extends JFrame {
 		inputPanel.add(inputTxtPanel);
 		
 		
-		JPanel searchPanel = new JPanel();
+		searchPanel = new JPanel();
 		
 		searchPanel.setMinimumSize(new Dimension(500, 175));
 		searchPanel.setPreferredSize(new Dimension(600, 200));
+		searchPanel.setBackground(new Color(184, 228, 255));
 		searchPanel.setLayout(new GridBagLayout());
 		
 		//File explorer link: https://is.gd/fL9fPu
@@ -208,7 +229,6 @@ public class TabbedFrontEnd extends JFrame {
 		
 		stockCont.setMinimumSize(minSize);
 		stockCont.setPreferredSize(prefSize);
-		stockCont.setBackground(Color.WHITE);
 	}
 	
 	private void extraStockTab(StockInput si, BackEnd tradeAlgo) {
@@ -216,7 +236,6 @@ public class TabbedFrontEnd extends JFrame {
 		
 		extraStockCont.setMinimumSize(minSize);
 		extraStockCont.setPreferredSize(prefSize);
-		extraStockCont.setBackground(Color.LIGHT_GRAY);
 	}
 	
 	//Scroll pane in JTabbedPane: https://stackoverflow.com/a/21643625/11628809
@@ -232,6 +251,8 @@ public class TabbedFrontEnd extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.getViewport().setMinimumSize(new Dimension(500, 500));
 		scrollPane.getViewport().setPreferredSize(new Dimension(600, 600));
+		
+		detectLabel.setFont(regularFont);
 		
 		csPanel.add(new JLabel("Detect Marubozu: " + "\n"));
 		csPanel.add(new JLabel("\n"));
@@ -351,11 +372,22 @@ public class TabbedFrontEnd extends JFrame {
 		settingsPanel.setMinimumSize(minSize);
 		settingsPanel.setPreferredSize(prefSize);
 		settingsPanel.setBackground(new Color(255, 252, 240));
-		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.PAGE_AXIS));
+		settingsPanel.setLayout(new GridBagLayout());
 		
-		JCheckBox checkBox = new JCheckBox();
+		JRadioButton nightModeBtn = new JRadioButton("Night Mode");
 		
-		AbstractAction action = new AbstractAction() {
+		nightModeBtn.setFont(regularFont);
+		nightModeBtn.setBackground(Color.WHITE);
+		nightModeBtn.setForeground(Color.BLACK);
+		
+		JRadioButton biggerTxtBtn = new JRadioButton("Increase Text Size");
+		
+		biggerTxtBtn.setFont(regularFont);
+		biggerTxtBtn.setBackground(Color.WHITE);
+		biggerTxtBtn.setForeground(Color.BLACK);
+		
+		//Set Foreground: https://stackoverflow.com/a/2966363/11628809
+		AbstractAction nightModeAction = new AbstractAction() {
 
 			/**
 			 * 
@@ -364,14 +396,86 @@ public class TabbedFrontEnd extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				settingsPanel.setBackground(new Color(120, 120, 120));
+				
+				if(isDay) {
+					//Since isDay is false first, if block activates light mode second.
+					tabbedPane.setBackground(new Color(107, 223, 255));
+					
+					inputPanel.setBackground(new Color(184, 228, 255));
+					inputTxtPanel.setBackground(new Color(184, 228, 255));
+					searchPanel.setBackground(new Color(184, 228, 255));
+					
+					csPanel.setBackground(Color.WHITE);
+					
+					settingsPanel.setBackground(new Color(255, 252, 240));
+					nightModeBtn.setBackground(Color.WHITE);
+					nightModeBtn.setForeground(Color.BLACK);
+					biggerTxtBtn.setBackground(Color.WHITE);
+					biggerTxtBtn.setForeground(Color.BLACK);
+					
+				} else {
+					//Since isDay is false first, else block activates night mode.
+					tabbedPane.setBackground(new Color(172, 178, 230));
+					
+					inputPanel.setBackground(new Color(167, 196, 214));
+					inputTxtPanel.setBackground(new Color(167, 196, 214));
+					searchPanel.setBackground(new Color(167, 196, 214));
+					
+					csPanel.setBackground(new Color(210, 210, 210));
+					
+					settingsPanel.setBackground(new Color(150, 150, 150));
+					nightModeBtn.setBackground(new Color(100, 100, 100));
+					nightModeBtn.setForeground(new Color(200, 213, 250));
+					biggerTxtBtn.setBackground(new Color(100, 100, 100));
+					biggerTxtBtn.setForeground(new Color(230, 196, 133));
+					
+				}
+				
+				isDay = !isDay; //Switch from false to true. Then true to false.
 			}
 			
 		};
 		
-		checkBox.addActionListener(action);
+		nightModeBtn.addActionListener(nightModeAction);
 		
-		settingsPanel.add(checkBox);
+		
+		AbstractAction bigTxtAction = new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(isSmall) {
+					//Since isSmall is false first, if block activates second.
+					biggerTxtBtn.setFont(regularFont);
+					nightModeBtn.setFont(regularFont);
+					inputPrompt.setFont(regularFont);
+					categoryTxt.setFont(regularFont);
+					cautionTxt.setFont(regularFont);
+					tabbedPane.setFont(regularFont);
+				} else {
+					//Since isSmall is false first, else block activates first.
+					biggerTxtBtn.setFont(bigFont);
+					nightModeBtn.setFont(bigFont);
+					inputPrompt.setFont(bigFont);
+					categoryTxt.setFont(bigFont);
+					cautionTxt.setFont(bigFont);
+					tabbedPane.setFont(bigFont);
+				}
+				
+				isSmall = !isSmall; //Switch from false to true. Then true to false.
+			}
+			
+		};
+		
+		biggerTxtBtn.addActionListener(bigTxtAction);
+		
+		settingsPanel.add(biggerTxtBtn);
+		settingsPanel.add(nightModeBtn);
 	}
 	
 	private void setGridBagConstraints(
