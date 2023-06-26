@@ -1,12 +1,10 @@
-# DawnTrades
-
 DawnTrades is a stock charting Java program that is intended to assist with trading publicly available common stock.
 
-Java and the Java Library xChart is utilized for the creation of DawnTrades due to the relative ease and convienence of making fast programs with graphs/charts.
+Java and the Java Library xChart is utilized for the creation of DawnTrades due to the relative ease and convenience of making fast programs with graphs/charts.
 
 Please make sure that you have version Java 8 or higher and the latest xChart update to be able to run this program effectively.
 
-Currently, the development of this working prototype does not have all the features that are going to be present in the final non-prototype build. All features, User Interfaces (U.I.), and methodologies are subject to change during development and improvements of this and future working prototypes. DawnTrades currently has:
+Currently, the development of this working prototype does not have all the features that are going to be present in the final non-prototype build. All features, User Interfaces (U.I.), and methodologies are subject to change during the development and improvement of this and future working prototypes. DawnTrades currently has:
 
 * A simple static graph that shows the stock price of a single stock ticker.
   
@@ -25,7 +23,7 @@ For long time goals:
 * Clean, simple, easy to understand User Interface (U.I.)
 
 * Fast - Trades today happen between milliseconds to nanoseconds.
-  - Should speed be balanced by accuracy or should speed be prioritized over accuracy?
+  - Should speed be balanced by accuracy, or should speed be prioritized over accuracy?
 
 Extra features that could be added:
 
@@ -38,7 +36,7 @@ Currently only able to be accessed by downloading the zip file provided by Githu
 
 Programmed and developed by Wei Jian Zhen and Jawad Rahman
 
-Apache 2.0 Open Source License
+Apache 2.0 Open-Source License
 
 **DISCLAIMER:**
-The program "**DawnTrades**" is not guarenteed to generate profits nor is qualified to offer financial advice for the end user (Any entities including but not limited to I, we, they, them, company, etc.). Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business related questions. Please use discretion when utilizing, modifying, and trading with **DawnTrades**. THE AUTHORS OF THE PROGRAM "**DawnTrades**" ARE NOT AND WILL NOT BE ENTITLED OR LIABLE FOR THE END USER'S PERSONAL TRADING DECISIONS, PROFITS, AND/OR DAMAGES. There are no gaurentees and/or warranties regarding the end user's use of **DawnTrades** and success in the end user's trading. **DawnTrades** does not reflect the author's opinions, decisions, and endorsements, implied nor expressed, and vise versa. The end user should knowingly be an age of 18 years or older and trade responsibly when using **DawnTrades**. This open scource project will remain free and always be free. If you have bought **DawnTrades** with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal council.
+The program "**DawnTrades**" is not guaranteed to generate profits nor is qualified to offer financial advice for the end user (Any entities including but not limited to I, we, they, them, company, etc.). Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business-related questions. Please use discretion when utilizing, modifying, and trading with **DawnTrades**. THE AUTHORS OF THE PROGRAM "**DawnTrades**" ARE NOT AND WILL NOT BE ENTITLED OR LIABLE FOR THE END USER'S PERSONAL TRADING DECISIONS, PROFITS, AND/OR DAMAGES. There are no gaurentees and/or warranties regarding the end user's use of **DawnTrades** and success in the end user's trading. **DawnTrades** does not reflect the author's opinions, decisions, and endorsements, implied nor expressed, and vise versa. The end user should knowingly be an age of 18 years or older and trade responsibly when using **DawnTrades**. This open scource project will remain free and always be free. If you have bought **DawnTrades** with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal counsel.
