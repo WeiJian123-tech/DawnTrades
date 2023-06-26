@@ -5,6 +5,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
+
+/*
+ * This class is the front end of the program where tabs are shown to the end user.
+ * 
+ * @Authors: Wei Jian Zhen, Jawad Rahman
+ * 
+ * @License: Apache 2.0 Open-Source License
+ */
 
 public class TabbedFrontEnd extends JFrame {
 	
@@ -45,11 +54,68 @@ public class TabbedFrontEnd extends JFrame {
 		isSmall = false;
 	}
 	
+	/*
+	 * Sets the size of the JFrame, background color of the JFrame,
+	 * sets the image icon for the window, calls tPanes() method,
+	 * and organizes tPanes() method panels.
+	 */
+	/**
+	 * Creates a window that displays all features for DawnTrades
+	 */
 	public void createAndDisplayGUI() {
 		setMinimumSize(new Dimension(500, 500));
 		setPreferredSize(new Dimension(600, 600));
 		setBackground(new Color(255, 255, 255));
-		setTitle("Project GoldenTrades");
+		
+		setTitle("DawnTrades");
+		
+		//Get System Directory: https://stackoverflow.com/a/7603444/11628809
+		String currentDir = System.getProperty("user.dir");
+		
+		//System.out.println("Working Directory = " + currentDir);
+		
+		File image16x16 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon16x16.png");
+		File image32x32 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon32x32.png");
+		File image64x64 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon64x64.png");
+		File image128x128 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon128x128.png");
+		
+		String image16x16AbsPath = image16x16.getAbsolutePath();
+		String sourcePath16 = image16x16AbsPath.substring(image16x16AbsPath.indexOf("src") - 1);
+		
+		String image32x32AbsPath = image32x32.getAbsolutePath();
+		String sourcePath32 = image32x32AbsPath.substring(image32x32AbsPath.indexOf("src") - 1);
+		
+		String image64x64AbsPath = image64x64.getAbsolutePath();
+		String sourcePath64 = image64x64AbsPath.substring(image64x64AbsPath.indexOf("src") - 1);
+		
+		String image128x128AbsPath = image128x128.getAbsolutePath();
+		String sourcePath128 = image128x128AbsPath.substring(image128x128AbsPath.indexOf("src") - 1);
+		
+		//System.out.println(sourcePath16);
+		
+		String fullPath16 = currentDir + sourcePath16;
+		String fullPath32 = currentDir + sourcePath32;
+		String fullPath64 = currentDir + sourcePath64;
+		String fullPath128 = currentDir + sourcePath128;
+		
+		//File location from Eclipse:
+		//C:\Users\ZhenF\eclipse-workspace\AutomaticTradingProgram\src\Prototype_003\DawnTradesIcon16x16.png
+		//System.out.println(fullImgPath16);
+		
+		ImageIcon img16 = new ImageIcon(fullPath16);
+		ImageIcon img32 = new ImageIcon(fullPath32);
+		ImageIcon img64 = new ImageIcon(fullPath64);
+		ImageIcon img128 = new ImageIcon(fullPath128);
+		
+		ArrayList<Image> iconImages = new ArrayList<>();
+		
+		iconImages.add(img16.getImage());
+		iconImages.add(img32.getImage());
+		iconImages.add(img64.getImage());
+		iconImages.add(img128.getImage());
+		
+		setIconImages(iconImages);
+		
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
@@ -139,7 +205,6 @@ public class TabbedFrontEnd extends JFrame {
 		fileTxtBox.setMinimumSize(new Dimension(350, 25));
 		fileTxtBox.setPreferredSize(new Dimension(400, 30));
 		fileTxtBox.setEditable(true);
-		fileTxtBox.setText("C:/Users/ZhenF/eclipse-workspace/AutomaticTradingProgram/src/Prototype_003/MSFT.csv");
 		
 		JButton openDirBtn = new JButton("Open Directory");
 		
@@ -213,15 +278,6 @@ public class TabbedFrontEnd extends JFrame {
 		searchPanel.add(fileTxtBox);
 		
 		inputPanel.add(searchPanel);
-		
-		/*
-		inputPanel.add(inputPrompt);
-		inputPanel.add(categoryTxt);
-		inputPanel.add(cautionTxt);
-		inputPanel.add(openDirBtn);
-		inputPanel.add(enterBtn);
-		inputPanel.add(fileTxtBox);
-		*/
 	}
 	
 	private void stockTab(StockInput si, BackEnd tradeAlgo) {
