@@ -12,7 +12,7 @@ import java.util.*;
  * 
  * @Authors: Wei Jian Zhen, Jawad Rahman
  * 
- * @License: Apache 2.0 Open-Source License
+ * @License: Apache 2.0 Open-Source License && Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
  */
 
 public class TabbedFrontEnd extends JFrame {
@@ -69,16 +69,29 @@ public class TabbedFrontEnd extends JFrame {
 		
 		setTitle("DawnTrades");
 		
-		//Get System Directory: https://stackoverflow.com/a/7603444/11628809
+		/*
+		 * Thanks to Anuj Patel (https://stackoverflow.com/users/876142/anuj-patel)
+		 * Edited by Anish B. (https://stackoverflow.com/users/8340997/anish-b)
+		 * For how to get System Directory: https://stackoverflow.com/a/7603444/11628809
+		 * 
+		 * Question from Qazi (https://stackoverflow.com/users/541929/qazi) 
+		 * Edited by auspicious99 (https://stackoverflow.com/users/1578867/auspicious99):
+		 * https://stackoverflow.com/q/4871051/11628809
+		 * 
+		 * Modified by storing System.getProperty("user.dir"); to a String called currentDir 
+		 * inside createAndDisplayGUI() method.
+		 */
 		String currentDir = System.getProperty("user.dir");
 		
 		//System.out.println("Working Directory = " + currentDir);
 		
+		//Gets the file path for the image icons from Eclipse via image file "properties" (Alt + Enter) tab.
 		File image16x16 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon16x16.png");
 		File image32x32 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon32x32.png");
 		File image64x64 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon64x64.png");
 		File image128x128 = new File("/AutomaticTradingProgram/src/Prototype_003/DawnTradesIcon128x128.png");
 		
+		//Gets the absolute path of above files and parses the string to start at /src/.
 		String image16x16AbsPath = image16x16.getAbsolutePath();
 		String sourcePath16 = image16x16AbsPath.substring(image16x16AbsPath.indexOf("src") - 1);
 		
@@ -93,20 +106,28 @@ public class TabbedFrontEnd extends JFrame {
 		
 		//System.out.println(sourcePath16);
 		
+		//Adds System Directory and parsed absolute path of image files together to create full image location path. 
 		String fullPath16 = currentDir + sourcePath16;
 		String fullPath32 = currentDir + sourcePath32;
 		String fullPath64 = currentDir + sourcePath64;
 		String fullPath128 = currentDir + sourcePath128;
 		
 		//File location from Eclipse:
+		
+		//currentDir == \Users\ZhenF\eclipse-workspace\AutomaticTradingProgram
+		//sourcePath16 == \src\Prototype_003\DawnTradesIcon16x16.png
+		
 		//C:\Users\ZhenF\eclipse-workspace\AutomaticTradingProgram\src\Prototype_003\DawnTradesIcon16x16.png
+		
 		//System.out.println(fullImgPath16);
 		
+		//Creates new ImageIcons by getting the full image location path.
 		ImageIcon img16 = new ImageIcon(fullPath16);
 		ImageIcon img32 = new ImageIcon(fullPath32);
 		ImageIcon img64 = new ImageIcon(fullPath64);
 		ImageIcon img128 = new ImageIcon(fullPath128);
 		
+		//Creates a new ArrayList to store each ImageIcon and enters them into the window to be displayed.
 		ArrayList<Image> iconImages = new ArrayList<>();
 		
 		iconImages.add(img16.getImage());
@@ -120,6 +141,12 @@ public class TabbedFrontEnd extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
 		
+		/*
+		 * Gets the back end files for each tab. 
+		 * Creates the U.I. for the tabs.
+		 * Initializes the first tab, the input tab.
+		 * Contains each tab in its container
+		 */
 		tPanes();
 		
 		pack();
@@ -147,14 +174,22 @@ public class TabbedFrontEnd extends JFrame {
 		add(tabbedPane);
 	}
 	
+	/*
+	 * The inputTab method is the first tab that the end user will see when he or she starts the program.
+	 * Comprises of an explanation text that welcomes the end user and advises them on how to use DawnTrades,
+	 * A JButton that opens their file explorer,
+	 * And a JButton and a JTextField that inserts a file from the end user that initiates the rest of the tabs
+	 * such as stock charts and candlestick detections.
+	 */
 	private void inputTab(StockInput si, BackEnd tradeAlgo, CandleStickDetectionAlgo csda) {
 		inputPanel = new JPanel();
 		
 		inputPanel.setMinimumSize(minSize);
 		inputPanel.setPreferredSize(prefSize);
 		inputPanel.setBackground(new Color(184, 228, 255));
-		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
+		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS)); //Arranges panels in a vetical layout.
 		
+		//Panel filled with explanation text
 		inputTxtPanel = new JPanel();
 		
 		inputTxtPanel.setMinimumSize(new Dimension(500, 175));
@@ -187,7 +222,7 @@ public class TabbedFrontEnd extends JFrame {
 		
 		inputPanel.add(inputTxtPanel);
 		
-		
+		//Panel that contains the two JButtons and one JTextField for the end user to interact.
 		searchPanel = new JPanel();
 		
 		searchPanel.setMinimumSize(new Dimension(500, 175));
@@ -195,9 +230,6 @@ public class TabbedFrontEnd extends JFrame {
 		searchPanel.setBackground(new Color(184, 228, 255));
 		searchPanel.setLayout(new GridBagLayout());
 		
-		//File explorer link: https://is.gd/fL9fPu
-		//Open window once previous window has opened: https://stackoverflow.com/a/9573069/11628809
-		//https://stackoverflow.com/a/9573032/11628809
 		//With Tabs: https://is.gd/5dvcsC
 		//Enter Key Registration: https://stackoverflow.com/a/16069707/11628809
 		JTextField fileTxtBox = new JTextField();
@@ -217,6 +249,13 @@ public class TabbedFrontEnd extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				/*
+				 * Thanks to Genuine Coder
+				 * with how to open file explorer
+				 * Genuine Coder's website:
+				 * https://is.gd/fL9fPu
+				 */
 				File directory = new File("C://Program Files//");
 				
 				Desktop desktop = Desktop.getDesktop();
@@ -232,8 +271,36 @@ public class TabbedFrontEnd extends JFrame {
 		
 		openDirBtn.addActionListener(openDirAction);
 		
+		/*
+		 * Thanks to Eng.Fouad (https://stackoverflow.com/users/597657/eng-fouad) and 
+		 * nIcE cOw (https://stackoverflow.com/users/1057230/nice-cow)
+		 * for thier answers to Jim_CS's (https://stackoverflow.com/users/1088617/jim-cs) question: 
+		 * https://stackoverflow.com/q/9572931/11628809
+		 * 
+		 * Eng.Fouad's answer: https://stackoverflow.com/a/9573069/11628809
+		 * nIcE cOw's answer: https://stackoverflow.com/a/9573032/11628809
+		 * 
+		 * Alongside Oracle's "Java Tutorials Code Sample – TabDemo.java" program 
+		 * That aided Wei Jian Zhen in designing the tabs for DawnTrades: 
+		 * 
+		 * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
+		 * https://is.gd/5dvcsC
+		 * 
+		 * Very little to none code was taken from the above answers.
+		 * The lines of code such as `tabbedPane.add(BUTTONPANEL, card1);`
+		 * from Oracle's "Java Tutorials Code Sample – TabDemo.java" program 
+		 * were taken and transformed to get the tab name as a string and the panel.
+		 */
+		
 		JButton enterBtn = new JButton("Enter");
 		
+		/*
+		 * This action gets the file text typed by the end user,
+		 * stores the .csv file information into the program,
+		 * and inserts it into the panels for implementation.
+		 * 
+		 * Displays all tab panels once this action is activated.
+		 */
 		AbstractAction enterAction = new AbstractAction() {
 
 			/**
@@ -266,6 +333,7 @@ public class TabbedFrontEnd extends JFrame {
 			
 		};
 		
+		//Allows users to be able to hit the enter key to activate the above action enterAction.
 		enterBtn.getInputMap(
 				JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter"
 						);
@@ -280,6 +348,9 @@ public class TabbedFrontEnd extends JFrame {
 		inputPanel.add(searchPanel);
 	}
 	
+	/*
+	 * Displays the main stock chart that is built with xChart Library.
+	 */
 	private void stockTab(StockInput si, BackEnd tradeAlgo) {
 		stockCont = new XChartPanel<>(new StockOHLCChart().OHLCGraph(si, tradeAlgo));
 		
@@ -287,6 +358,11 @@ public class TabbedFrontEnd extends JFrame {
 		stockCont.setPreferredSize(prefSize);
 	}
 	
+	/*
+	 * Displays an extra stock chart built with the xChart Library that
+	 * shows extra stock information that are too big or too small to be viewed 
+	 * concisely on the main stock chart.
+	 */
 	private void extraStockTab(StockInput si, BackEnd tradeAlgo) {
 		extraStockCont = new XChartPanel<>(new OHLCXtraChart().xtraGraph(si, tradeAlgo));
 		
@@ -294,8 +370,25 @@ public class TabbedFrontEnd extends JFrame {
 		extraStockCont.setPreferredSize(prefSize);
 	}
 	
-	//Scroll pane in JTabbedPane: https://stackoverflow.com/a/21643625/11628809
+	/*
+	 * Panel that displays text regarding candlestick detections.
+	 */
 	private void csTab(StockInput si, CandleStickDetectionAlgo csda) {
+		/*
+		 * Thanks to Paul Samsotha (https://stackoverflow.com/users/2587435/paul-samsotha) 
+		 * for their answer to puprog's (https://stackoverflow.com/users/3234614/puprog) question
+		 * edited by Paul Samsotha:
+		 * https://stackoverflow.com/q/21636895/11628809
+		 * 
+		 * Paul Samsotha's answer for implementing a JScrollPane into a JTabbedPane:
+		 * https://stackoverflow.com/a/21643625/11628809
+		 * 
+		 * Removed adding JScrollPane to JTabbedPane since this is a void method.
+		 * Transferred from main method to csTab void method.
+		 * Removed most code and modified initialization of JPanel and JScrollPane.
+		 * Added methods from CandleStickDetectionAlgo class.
+		 * Set scroll policy and size of JscrollPane.
+		 */
 		csPanel = new JPanel();
 		
 		csPanel.setBackground(Color.WHITE);
@@ -422,6 +515,11 @@ public class TabbedFrontEnd extends JFrame {
 		tabbedPane.revalidate();
 	}
 	
+	/*
+	 * Panel that displays setting options for the end user.
+	 * Limited to toggling night mode and increasing font size 
+	 * in this current working prototype.
+	 */
 	private void settingsTab() {
 		settingsPanel = new JPanel();
 		
@@ -442,7 +540,19 @@ public class TabbedFrontEnd extends JFrame {
 		biggerTxtBtn.setBackground(Color.WHITE);
 		biggerTxtBtn.setForeground(Color.BLACK);
 		
-		//Set Foreground: https://stackoverflow.com/a/2966363/11628809
+		/*
+		 * Thanks to aioobe's (https://stackoverflow.com/users/276052/aioobe)
+		 * answer to Stefanos Kargas' (https://stackoverflow.com/users/350061/stefanos-kargas)
+		 * question edited by aioobe: https://stackoverflow.com/q/2966334/11628809
+		 * 
+		 * aioobe's answer about how to set foreground JLabel color: https://stackoverflow.com/a/2966363/11628809
+		 * 
+		 * Turned nightModeBtn and biggerTxtBtn JButton foreground text color to many colors beside red.
+		 */
+		
+		/*
+		 * Toggles night and day mode for DawnTrades program.
+		 */
 		AbstractAction nightModeAction = new AbstractAction() {
 
 			/**
@@ -494,7 +604,9 @@ public class TabbedFrontEnd extends JFrame {
 		
 		nightModeBtn.addActionListener(nightModeAction);
 		
-		
+		/*
+		 * Toggles increased text size for end user.
+		 */
 		AbstractAction bigTxtAction = new AbstractAction() {
 
 			/**
@@ -534,6 +646,11 @@ public class TabbedFrontEnd extends JFrame {
 		settingsPanel.add(nightModeBtn);
 	}
 	
+	/*
+	 * Sets gridBagConstraints for JComponents that have GridBagLayout as their layout.
+	 * Currently unused because of tricky implementation of GridBagLayout and 
+	 * lack of time before release date of working prototype of DawnTrades.
+	 */
 	private void setGridBagConstraints(
 			int fill, int anchor,
 			int gridx, int gridy,

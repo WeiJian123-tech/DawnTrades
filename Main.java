@@ -43,7 +43,7 @@ import javax.swing.SwingUtilities;
  * 
  * @Authors: Wei Jian Zhen, Jawad Rahman
  * 
- * @License: Apache 2.0 Open-Source License
+ * @License: Apache 2.0 Open-Source License && Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
  */
 
 public class Main {
