@@ -1,4 +1,4 @@
-DawnTrades is a stock charting Java program that is intended to assist with trading publicly available common stock.
+DawnTrades is a free and open source stock charting Java program that is intended to assist with trading publicly available common stock.
 
 Java and the Java Library xChart is utilized for the creation of DawnTrades due to the relative ease and convenience of making fast programs with graphs/charts.
 
