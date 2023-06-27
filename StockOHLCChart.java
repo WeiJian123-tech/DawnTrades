@@ -6,24 +6,63 @@ import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
+/*
+ * Thanks to xChart and their developers/collaborators for their example code for aiding and guiding 
+ * Wei Jian Zhen to be able to develop the main stock OHLC Chart for DawnTrades.
+ * 
+ * xChart Website:
+ * https://knowm.org/open-source/xchart/
+ * 
+ * xChart Github Repository:
+ * https://github.com/knowm/XChart
+ * 
+ * xChart example references:
+ * 
+ * 	LineChart05.java for Series Markers: 
+ * 	https://github.com/knowm/XChart/blob/9abbb92d37c69cd305f00fe10ff090cabda81ee5/
+ * 	xchart-demo/src/main/java/org/knowm/xchart/demo/charts/line/LineChart05.java#L4
+ * 
+ * 	OHLCChart01.java, OHLCChart02.java, and OHLCChart03.java for providing how to make OHLCCharts:
+ * 	
+ * 		OHLCChart01.java:
+ * 		https://github.com/knowm/XChart/blob/9abbb92d37c69cd305f00fe10ff090cabda81ee5/
+ * 		xchart-demo/src/main/java/org/knowm/xchart/demo/charts/ohlc/OHLCChart01.java#L22
+ * 
+ * 		OHLCChart02.java:
+ * 		https://github.com/knowm/XChart/blob/9abbb92d37c69cd305f00fe10ff090cabda81ee5/
+ * 		xchart-demo/src/main/java/org/knowm/xchart/demo/charts/ohlc/OHLCChart02.java#L50
+ * 
+ * 		OHLCChart03.java:
+ * 		https://github.com/knowm/XChart/blob/9abbb92d37c69cd305f00fe10ff090cabda81ee5/
+ * 		xchart-demo/src/main/java/org/knowm/xchart/demo/charts/ohlc/OHLCChart03.java#L51
+ * 
+ * 	SwingDemo.java for being able to create xChart panels that connect to TabbedFrontEnd.java:
+ * 	https://github.com/knowm/XChart/blob/9abbb92d37c69cd305f00fe10ff090cabda81ee5/
+ * 	xchart-demo/src/main/java/org/knowm/xchart/standalone/SwingDemo.java#L14
+ */
+
 public class StockOHLCChart {
 
 	public OHLCChart OHLCGraph(StockInput si, BackEnd tradeAlgo) {
 		
+		//Build a new OHLC Chart
 		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("Project GoldenTrades").build();
 		
+		//Style the OHLC Chart
 		chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
 		chart.getStyler().setLegendLayout(LegendLayout.Vertical);
 		chart.getStyler().setYAxisDecimalPattern("##.00");
 		chart.getStyler().setToolTipsEnabled(true);
 		
-		//addSeries() only allows List<?> and List<Date> for second parameter. Not Date[].
+		//addSeries() method only allows List<?> and List<Date> for second parameter. Not Date[].
 		
 		chart.addSeries(
 				"Candlestick", si.getXDateList(), si.getOpenPriceList(), si.getHighPriceList(), si.getLowPriceList(),
 				si.getClosePriceList()
 				);
 		
+		//If the number of stock data is greater than 30 days,
+		//the line to show the stock data will not have coordinates.
 		if(si.getXDateList().size() < 30) {
 			chart.addSeries("SMA5", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 5)).setMarker(
 					SeriesMarkers.NONE

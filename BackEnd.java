@@ -1,7 +1,7 @@
 package Prototype_003;
 
 /*
- * Part of program given by ChatGPT.
+ * Part of program provided, derived, and modified from ChatGPT.
  */
 
 import java.util.*;
@@ -167,8 +167,15 @@ public class BackEnd {
 		return macdLine;
 	}
 	
-	//Sliding Door Approach/Window Sliding Technique: https://www.geeksforgeeks.org/window-sliding-technique/#
-	//Reverse for loop: https://is.gd/GTBAgX 
+	/*
+		Thanks to Geeks for Geeks for the article about the 
+		Sliding Door Approach/Window Sliding Technique:
+		https://www.geeksforgeeks.org/window-sliding-technique/#
+		
+		Thanks to MKYong for the article about 
+		Reverse for loop: https://is.gd/GTBAgX 
+	 * 
+	 */
 	//THE RSI LINE TO BE PLOTTED IN FRONT END	
   	public List<Double> calculateRSILine(double[] closingPrices, int periods) {
   		List<Double> rsiValues = new ArrayList<Double>();
@@ -227,11 +234,18 @@ public class BackEnd {
 	//Lastly combining them to predict stocks accurately.
 	
 	//Calculate a simple moving average of a stock. 
-	//Link: https://is.gd/O5XYS9
+	/*
+	 * Thanks to Investopedia for their article about Simple Moving Average
+	 * by Adam Hayes (https://www.investopedia.com/contributors/53677/)
+	 * reviewed by Charles Potters (https://www.investopedia.com/charles-potters-4942512)
+	 * fact checked by Katrina Munichiello (https://www.investopedia.com/katrina-munichiello-5078531)
+	 * 
+	 * Link: https://is.gd/O5XYS9
+	 */
 	
 	//@param periods is the total number of times the stock prices goes into the sum before being divided by periods.
 	//Gets closing price data
-  	//Code provided by ChatGPT
+  	//Thanks to ChatGPT for providing the body of code. Modified to be inserted into a List.
 	private List<Double> simpleMovingAverage(double[] closingPrices, int periods) {
 		
 		//long startTime = System.nanoTime();
@@ -261,7 +275,13 @@ public class BackEnd {
 	}
 	
 	//Calculate a standard deviation of a stock.
-	//Links: https://is.gd/NErz9N & https://is.gd/AkfTaX
+	/*
+	 * Thanks to Programiz for their article about how to calculate standard deviation in Java:
+	 * https://is.gd/NErz9N
+	 * 
+	 * Thanks to Zaner for thier article about how to calculate standard deviation of a stock:
+	 * https://is.gd/AkfTaX
+	 */
 	
 	private List<Double> standardDeviation(double[] closingPrices, int periods) {
 		
@@ -303,10 +323,12 @@ public class BackEnd {
 	}
 	
 	/*
+	 * Thanks to Fidelity, Investopedia, and StockCharts for their articles about Bollinger Bands.
+	 * 
 	 * Links for Bollinger Bands:
 	 * Fidelity summary: https://is.gd/mof0KQ
 	 * Investopedia explanation: https://is.gd/cQeFkF
-	 * Stock Charts Formula: https://is.gd/oFRc9L
+	 * StockCharts Website and Bollinger Bands Formula: https://is.gd/oFRc9L
 	*/
 	private List<Double> upperBollingerBand(double[] closingPrices, int periods) {
 		//The middle bollinger band is the moving average
@@ -347,8 +369,18 @@ public class BackEnd {
 		return lowBollBand;
 	}
 	
-	//Calculate Fibonacci Retracement levels of a stock at 2 points. Updates only when a new high or low is detected.
-	//Links: https://is.gd/aRjSTM && https://is.gd/D0sR5w
+	/*
+	 * Calculate Fibonacci Retracement levels of a stock at 2 points. Updates only when a new high or low is detected.
+	 * 
+	 * Thanks to Investopedia for their article about Fibonnaci Retracements
+	 * by Cory Mitchell (https://www.investopedia.com/contributors/335/)
+	 * reviewed by Chip Stapleton (https://www.investopedia.com/chip-stapleton-5120345)
+	 * fact checked by Kirsten Rohrs Schmitt (https://www.investopedia.com/kirsten-schmitt-5078524):
+	 * https://is.gd/aRjSTM
+	 * 
+	 * Thanks to Centerpoint by Clear Street for their article about Fibonnaci Retracements:
+	 * https://is.gd/D0sR5w
+	 */
 	//Discontinued until xChart updates with AnnotationLine features that allow for specific coordinate positions.
 	
 	/*
@@ -463,12 +495,10 @@ public class BackEnd {
 	
 	public List<Double> getEMA(double[] closingPrices, int periods) {
 		return calculateEMALine(closingPrices, periods);
-		//return Arrays.stream(calculateEMA(closingPrices, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	public List<Double> getRSI(double[] closingPrices, int periods) {
 		return calculateRSILine(closingPrices, periods);
-		//return Arrays.stream(calculateRSI(closingPrices, periods)).boxed().collect(Collectors.toList());
 	}
 	
 	/*

@@ -91,7 +91,6 @@ public class CandleStickDetectionAlgo extends TabbedFrontEnd {
   	}
   	
   	//To display to the end user for all candlesticks presented on the OHLCChart
-  	//Concatenate all non null strings: https://is.gd/WJi63O
   	public void displayMarubozu(
   			List<String> dateList, double[] openData, double[] highData, double[] lowData, double[] closeData
   			) {
