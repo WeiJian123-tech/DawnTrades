@@ -3,6 +3,7 @@ DawnTrades is a free and open source stock charting Java program that is intende
 Java and the Java Library xChart is utilized for the creation of DawnTrades due to the relative ease and convenience of making fast programs with graphs/charts.
 
 Please make sure that you have version Java 8 or higher and the latest xChart update to be able to run this program effectively.
+Best compatible with Windows Operating Systems (O.S.). Untested for Mac and Linux O.S. Incompatable with mobile devices.
 
 Currently, the development of this working prototype does not have all the features that are going to be present in the final non-prototype build. All features, User Interfaces (U.I.), and methodologies are subject to change during the development and improvement of this and future working prototypes. DawnTrades currently has:
 
@@ -32,7 +33,7 @@ Extra features that could be added:
 
 Right click to save xChart charts to your hard drive.
 
-Currently only able to be accessed by downloading the zip file provided by Github and running it through a Java IDE.
+As of right now, people can only be able to access DawnTrades by downloading the zip file provided by Github and running it through a Java IDE. A runnable jar is being considered for development in this working prototype or the next version of this working prototype.
 
 Programmed and developed by Wei Jian Zhen and Jawad Rahman
 
