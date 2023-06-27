@@ -578,6 +578,8 @@ public class BackEnd {
 	
 	Multiple smaller strategies get their own algorithm.
 	They are then called by a higher level algorithm that combines their outputs and makes a decision.
+
+ 	IMPORTANT NOTE: Strategy and decision NOT gaurenteed to be profitable! Further revision required by devs and/or end user.
 	
 	*/
 	
