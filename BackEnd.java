@@ -32,7 +32,7 @@ public class BackEnd {
 	}
 	
 	// RSI CALCULATION ALGORITHM
-  	public double[] calculateRSI(double[] closingPrices, int periods) {
+  	private double[] calculateRSI(double[] closingPrices, int periods) {
       		double[] rsiValues = new double[closingPrices.length];
 
       		double prevAvgGain = 0;
@@ -115,7 +115,15 @@ public class BackEnd {
 		return macdLine[lastSignalIndex] - signalLine[lastSignalIndex];
   	}
 	
-	//Front End EMA method  Link: https://is.gd/m2Q5WI
+	/*
+	 * Thanks to Investopedia for "What is EMA? How to Use Exponential Moving Average With Formula" article
+	 * by James Chen (https://www.investopedia.com/contributors/101529/)
+	 * reviewed by Charles Potters (https://www.investopedia.com/charles-potters-4942512)
+	 * fact checked by Ryan Eichler (https://www.investopedia.com/ryan-eichler-5217138):
+	 * https://is.gd/m2Q5WI
+	 */
+	
+	//Front End EMA method
 	public List<Double> calculateEMALine(double[] closingPrices, int periods) {
 		
 		//long startTime = System.nanoTime();
@@ -227,7 +235,6 @@ public class BackEnd {
     
   		return rsiValues;
   	}
-
 
 	//Coding short term predictions via Technical Analysis.
 	//Then Fundamental Analysis.
