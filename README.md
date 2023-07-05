@@ -1,6 +1,6 @@
 DawnTrades is a free and open source stock charting Java program that is intended to assist with trading publicly available common stock.
 
-Java and the Java Library [xChart](https://github.com/knowm/XChart.git) is utilized for the creation of DawnTrades due to the relative ease and convenience of making fast programs with graphs/charts.
+Java and the Java Library [XChart](https://github.com/knowm/XChart.git) is utilized for the creation of DawnTrades due to the relative ease and convenience of making fast programs with graphs/charts.
 
 Please make sure that you have version Java 8 or higher and the latest xChart update to be able to run this program effectively.
 Best compatible with Windows Operating Systems (O.S.). Untested for Mac and Linux O.S. Incompatable with mobile devices.
@@ -37,7 +37,7 @@ As of right now, people can only be able to access DawnTrades by downloading the
 
 Programmed and developed by Wei Jian Zhen and Jawad Rahman
 
-Apache 2.0 Open-Source License
+[Apache 2.0 Open-Source License](https://www.apache.org/licenses/LICENSE-2.0)
 
 **DISCLAIMER:**
 The program "**DawnTrades**" is not guaranteed to generate profits nor is qualified to offer financial advice for the end user (Any entities including but not limited to I, we, they, them, company, etc.). Please consult with a finanacial advisor for inquiries into finance, trading, securities, equities, or any additional financial or business-related questions. Please use discretion when utilizing, modifying, and trading with **DawnTrades**. THE AUTHORS OF THE PROGRAM "**DawnTrades**" ARE NOT AND WILL NOT BE ENTITLED OR LIABLE FOR THE END USER'S PERSONAL TRADING DECISIONS, PROFITS, AND/OR DAMAGES. There are no gaurentees and/or warranties regarding the end user's use of **DawnTrades** and success in the end user's trading. **DawnTrades** does not reflect the author's opinions, decisions, and endorsements, implied nor expressed, and vise versa. The end user should knowingly be an age of 18 years or older and trade responsibly when using **DawnTrades**. This open scource project will remain free and always be free. If you have bought **DawnTrades** with tangible currency, please know that you have been scammed and that you should contact the authorities to reclaim damages with legal counsel.
