@@ -38,9 +38,11 @@ As of right now, people can only be able to access DawnTrades by downloading the
 **How to Use DawnTrades**
 
 First open an IDE such as Eclipse to run DawnTrades:
+
 ![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/44109195-7ec6-4e11-b5c7-d94173c3ad67)
 
 Next run the program. A window should pop-up displaying DawnTrades:
+
 ![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/2f201041-8d5d-4fa6-a02f-54daf233f709)
 ![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/c21f9449-5df0-4b27-9ecc-eda275c6bd47)
 
@@ -51,6 +53,7 @@ Now you will need to enter in your Comma-separated values `.csv` file name into 
 ![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/e4fbb778-7c84-4ce8-b0f3-bbf5a132fba5)
 
 Congratulations! You are now able to use DawnTrades. 
+
 ![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/1d2b586b-3ebd-4360-8ec8-872a3bc75af5)
 
 Programmed and developed by Wei Jian Zhen and Jawad Rahman
