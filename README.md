@@ -35,6 +35,24 @@ Right click to save xChart charts to your hard drive.
 
 As of right now, people can only be able to access DawnTrades by downloading the zip file provided by Github and running it through a Java IDE. A runnable jar is being considered for development in this working prototype or the next version of this working prototype.
 
+**How to Use DawnTrades**
+
+First open an IDE such as Eclipse to run DawnTrades:
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/44109195-7ec6-4e11-b5c7-d94173c3ad67)
+
+Next run the program. A window should pop-up displaying DawnTrades:
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/2f201041-8d5d-4fa6-a02f-54daf233f709)
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/c21f9449-5df0-4b27-9ecc-eda275c6bd47)
+
+Now you will need to enter in your Comma-separated values `.csv` file name into the textbox next to the "Enter" button. Then click the "Enter" button or enter key on your keyboard to view the rest of the tabs like stock charts. You can get stock `.csv` files by downloading them from websites such as [Yahoo Finance](https://finance.yahoo.com/quote/MSFT/history?p=MSFT).
+
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/b3eab844-1215-4ffc-ae9b-2b0c6a4138b1)
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/869383f2-f1c0-4bc6-aca2-96417be7393d)
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/e4fbb778-7c84-4ce8-b0f3-bbf5a132fba5)
+
+Congratulations! You are now able to use DawnTrades. 
+![image](https://github.com/WeiJian123-tech/DawnTrades/assets/55195954/1d2b586b-3ebd-4360-8ec8-872a3bc75af5)
+
 Programmed and developed by Wei Jian Zhen and Jawad Rahman
 
 [Apache 2.0 Open-Source License](https://www.apache.org/licenses/LICENSE-2.0)
