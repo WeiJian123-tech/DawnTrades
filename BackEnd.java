@@ -155,6 +155,8 @@ public class BackEnd {
 	public List<Double> calculateMACDLine(
 			double[] closingPrices, int shortPeriod, int longPeriod, int periods
 			) {
+		//Replace calculateEMA() to further align with front end methods and maybe delete back end methods.
+		//Also possibly improve efficiency.
 		double[] shortEMA = calculateEMA(closingPrices, shortPeriod);
 		double[] longEMA = calculateEMA(closingPrices, longPeriod);
 
@@ -586,7 +588,8 @@ public class BackEnd {
 	Multiple smaller strategies get their own algorithm.
 	They are then called by a higher level algorithm that combines their outputs and makes a decision.
 
- 	IMPORTANT NOTE: Strategy and decision NOT gaurenteed to be profitable! Further revision required by devs and/or end user.
+ 	IMPORTANT NOTE:
+ 	Strategy and decision NOT guaranteed to be profitable! Further revision required by developers and/or end user.
 	
 	*/
 	

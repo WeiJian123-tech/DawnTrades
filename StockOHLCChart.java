@@ -1,5 +1,7 @@
 package Prototype_003;
 
+import java.awt.Color;
+
 import org.knowm.xchart.OHLCChart;
 import org.knowm.xchart.OHLCChartBuilder;
 import org.knowm.xchart.style.Styler.LegendLayout;
@@ -46,9 +48,13 @@ public class StockOHLCChart {
 	public OHLCChart OHLCGraph(StockInput si, BackEnd tradeAlgo) {
 		
 		//Build a new OHLC Chart
-		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("Project GoldenTrades").build();
+		OHLCChart chart = new OHLCChartBuilder().width(800).height(600).title("DawnTrades").build();
 		
 		//Style the OHLC Chart
+		chart.getStyler().setPlotBackgroundColor(Color.WHITE);
+		chart.getStyler().setPlotGridLinesColor(Color.LIGHT_GRAY);
+		chart.getStyler().setAxisTickLabelsColor(Color.BLACK);
+		chart.getStyler().setLegendBackgroundColor(Color.WHITE);
 		chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
 		chart.getStyler().setLegendLayout(LegendLayout.Vertical);
 		chart.getStyler().setYAxisDecimalPattern("##.00");
@@ -61,36 +67,36 @@ public class StockOHLCChart {
 				si.getClosePriceList()
 				);
 		
-		//If the number of stock data is greater than 30 days,
-		//the line to show the stock data will not have coordinates.
+		chart.addSeries(
+				"Upper Bollinger Band", si.getXDateList(), tradeAlgo.getUpperBand(si.getClosePrices(), 5)
+				).setMarker(SeriesMarkers.NONE);
+		chart.addSeries(
+				"Lower Bollinger Band", si.getXDateList(), tradeAlgo.getLowerBand(si.getClosePrices(), 5)
+				).setMarker(SeriesMarkers.NONE);
+		
+		/*
+		If the number of stock data entries are greater than 30 days,
+		the line to show the stock data will not have coordinates displayed.
+		*/
 		if(si.getXDateList().size() < 30) {
-			chart.addSeries("SMA5", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 5)).setMarker(
-					SeriesMarkers.NONE
+			chart.addSeries(
+					"SMA5", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 5)
 					);
 			chart.addSeries("SMA10", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 10));
 			chart.addSeries("SMA15", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 15));
-		} else {
-			chart.addSeries("SMA5", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 5)).setMarker(
-					SeriesMarkers.NONE
-					);
-			chart.addSeries("SMA10", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 10)).setMarker(
-					SeriesMarkers.NONE
-					);
-			chart.addSeries("SMA15", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 15)).setMarker(
-					SeriesMarkers.NONE
-					);
-		}
-		
-		chart.addSeries("Upper Bollinger Band", si.getXDateList(), tradeAlgo.getUpperBand(si.getClosePrices(), 5)).setMarker(
-				SeriesMarkers.NONE
-				);
-		chart.addSeries("Lower Bollinger Band", si.getXDateList(), tradeAlgo.getLowerBand(si.getClosePrices(), 5)).setMarker(
-				SeriesMarkers.NONE
-				);
-		
-		if(si.getXDateList().size() < 30) {
+			
 			chart.addSeries("EMA5", si.getXDateList(), tradeAlgo.getEMA(si.getClosePrices(), 5));
 		} else {
+			chart.addSeries(
+					"SMA5", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 5)
+					).setMarker(SeriesMarkers.NONE);
+			chart.addSeries(
+					"SMA10", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 10)
+					).setMarker(SeriesMarkers.NONE);
+			chart.addSeries(
+					"SMA15", si.getXDateList(), tradeAlgo.getSimpleMovingAverage(si.getClosePrices(), 15)
+					).setMarker(SeriesMarkers.NONE);
+			
 			chart.addSeries("EMA5", si.getXDateList(), tradeAlgo.getEMA(si.getClosePrices(), 5)).setMarker(
 					SeriesMarkers.NONE
 					);

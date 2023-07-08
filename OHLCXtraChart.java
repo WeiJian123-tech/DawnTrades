@@ -1,5 +1,7 @@
 package Prototype_003;
 
+import java.awt.Color;
+
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
@@ -37,6 +39,10 @@ public class OHLCXtraChart extends StockOHLCChart {
 		XYChart xtraChart = new XYChartBuilder().width(800).height(500).title("Extra Stock Indicators").build();
 		
 		//Styles the line chart with zoom enabled.
+		xtraChart.getStyler().setPlotBackgroundColor(Color.WHITE);
+		xtraChart.getStyler().setPlotGridLinesColor(Color.LIGHT_GRAY);
+		xtraChart.getStyler().setAxisTickLabelsColor(Color.BLACK);
+		xtraChart.getStyler().setLegendBackgroundColor(Color.WHITE);
 		xtraChart.getStyler().setLegendPosition(LegendPosition.OutsideE);
 		xtraChart.getStyler().setLegendLayout(LegendLayout.Vertical);
 		xtraChart.getStyler().setYAxisDecimalPattern("##.00");
@@ -54,7 +60,9 @@ public class OHLCXtraChart extends StockOHLCChart {
 				SeriesMarkers.NONE
 				);
 		xtraChart.addSeries("EMA9 (Signal Line)", si.getXDateList(), tradeAlgo.getEMA(si.getClosePrices(), 9));
-		xtraChart.addSeries("RSI", si.getXDateList(), tradeAlgo.getRSI(si.getClosePrices(), 5)).setMarker(SeriesMarkers.NONE);
+		xtraChart.addSeries(
+				"RSI", si.getXDateList(), tradeAlgo.getRSI(si.getClosePrices(), 5)
+				).setMarker(SeriesMarkers.NONE);
 		
 		return xtraChart;
 	}
